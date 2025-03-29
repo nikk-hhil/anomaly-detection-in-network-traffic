@@ -353,6 +353,77 @@ class FeatureEngineer:
         plt.tight_layout()
         plt.show()
     
+    def transform_feature_selection(self, X: np.ndarray) -> np.ndarray:
+        """
+    Apply previously fitted feature selection to new data.
+    
+    Parameters:
+    -----------
+    X : np.ndarray
+        Input features
+        
+    Returns:
+    --------
+    np.ndarray
+        Transformed features with only selected features
+    """
+        if self.feature_selector is None:
+            raise ValueError("Feature selector has not been fitted yet. Call select_features first.")
+    
+    # Handle dimension mismatch - log information about the issue
+        expected_features = getattr(self.feature_selector, 'n_features_in_', None)
+        actual_features = X.shape[1]
+    
+        if expected_features is not None and expected_features != actual_features:
+            logger.warning(f"Feature count mismatch: SelectKBest expects {expected_features} features but got {actual_features}.")
+        
+        # Check if we have stored selected indices
+            if hasattr(self, 'selected_features_') and self.selected_features_ is not None:
+            # Just return the features we know were selected, by name
+            # This won't work here, as we don't have the names, just indices
+                pass
+        
+        # As a fallback, simply select the top k features by variance
+            from sklearn.feature_selection import VarianceThreshold
+            k = getattr(self.feature_selector, 'k', 20)  # Default to 20 if k is not found
+            selector = VarianceThreshold()
+            X_var = selector.fit_transform(X)
+        
+        # If still too many features, just take the first k
+            if X_var.shape[1] > k:
+                logger.warning(f"Falling back to selecting top {k} features by variance")
+            # Get indices of features with highest variance
+                var = np.var(X, axis=0)
+                top_indices = np.argsort(var)[-k:]
+                return X[:, top_indices]
+            else:
+                return X_var
+    
+    # Normal case - no dimension mismatch
+        try:
+        # For SelectKBest, we can use transform directly
+            if hasattr(self.feature_selector, 'transform'):
+                return self.feature_selector.transform(X)
+        # For PCA
+            elif hasattr(self.pca_model, 'transform') and self.pca_model is not None:
+                return self.pca_model.transform(X)
+            else:
+            # Fallback: manually select features based on the indices
+                if hasattr(self.feature_selector, 'get_support'):
+                # Get the indices of selected features
+                    selected_indices = self.feature_selector.get_support(indices=True)
+                # Return only those columns
+                    return X[:, selected_indices]
+                else:
+                    raise ValueError("Cannot determine how to transform features with the current selector")
+        except Exception as e:
+        # If all else fails, select top k features by variance as a fallback
+            logger.error(f"Error applying feature selection: {e}. Falling back to variance-based selection.")
+            k = getattr(self.feature_selector, 'k', 20)  # Default to 20 if k is not found
+            var = np.var(X, axis=0)
+            top_indices = np.argsort(var)[-k:]
+            return X[:, top_indices]
+    
     def plot_pca_variance(self, n_components: int = None) -> None:
         """
         Plot explained variance ratio of PCA components.

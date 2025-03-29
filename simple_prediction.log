@@ -1,0 +1,374 @@
+2025-03-29 15:53:21,946 - __main__ - INFO - Initializing anomaly detector...
+2025-03-29 15:53:22,061 - src.anomaly_detector - INFO - Loaded model from models/best_model.joblib
+2025-03-29 15:53:22,063 - src.anomaly_detector - INFO - Loaded preprocessor from models/preprocessor.joblib
+2025-03-29 15:53:22,370 - src.anomaly_detector - INFO - Loaded feature engineer from models/feature_engineer.joblib
+2025-03-29 15:53:22,371 - __main__ - INFO - Loading data from data/test_data.csv...
+2025-03-29 15:53:22,378 - __main__ - INFO - Loaded data with shape: (1000, 79)
+2025-03-29 15:53:22,378 - __main__ - INFO - Target column ' Label' found in data
+2025-03-29 15:53:22,380 - __main__ - INFO - Making predictions...
+2025-03-29 15:53:22,397 - src.feature_engineering - INFO - 
+=== Engineering New Features ===
+2025-03-29 15:53:22,398 - src.feature_engineering - INFO - Created rate feature:  Total Fwd Packets_Rate
+2025-03-29 15:53:22,399 - src.feature_engineering - INFO - Created rate feature:  Total Backward Packets_Rate
+2025-03-29 15:53:22,399 - src.feature_engineering - INFO - Created rate feature: Total Length of Fwd Packets_Rate
+2025-03-29 15:53:22,400 - src.feature_engineering - INFO - Created rate feature:  Total Length of Bwd Packets_Rate
+2025-03-29 15:53:22,400 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Max_Rate
+2025-03-29 15:53:22,400 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Min_Rate
+2025-03-29 15:53:22,400 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Mean_Rate
+2025-03-29 15:53:22,401 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Std_Rate
+2025-03-29 15:53:22,401 - src.feature_engineering - INFO - Created rate feature: Bwd Packet Length Max_Rate
+2025-03-29 15:53:22,401 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Min_Rate
+2025-03-29 15:53:22,402 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Mean_Rate
+2025-03-29 15:53:22,402 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Std_Rate
+2025-03-29 15:53:22,402 - src.feature_engineering - INFO - Created rate feature:  Flow Packets/s_Rate
+2025-03-29 15:53:22,403 - src.feature_engineering - INFO - Created rate feature: Fwd Packets/s_Rate
+2025-03-29 15:53:22,403 - src.feature_engineering - INFO - Created rate feature:  Bwd Packets/s_Rate
+2025-03-29 15:53:22,403 - src.feature_engineering - INFO - Created rate feature:  Min Packet Length_Rate
+2025-03-29 15:53:22,404 - src.feature_engineering - INFO - Created rate feature:  Max Packet Length_Rate
+2025-03-29 15:53:22,404 - src.feature_engineering - INFO - Created rate feature:  Packet Length Mean_Rate
+2025-03-29 15:53:22,404 - src.feature_engineering - INFO - Created rate feature:  Packet Length Std_Rate
+2025-03-29 15:53:22,405 - src.feature_engineering - INFO - Created rate feature:  Packet Length Variance_Rate
+2025-03-29 15:53:22,405 - src.feature_engineering - INFO - Created rate feature:  Average Packet Size_Rate
+2025-03-29 15:53:22,406 - src.feature_engineering - INFO - Created rate feature:  Fwd Avg Packets/Bulk_Rate
+2025-03-29 15:53:22,406 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Packets/Bulk_Rate
+2025-03-29 15:53:22,406 - src.feature_engineering - INFO - Created rate feature: Subflow Fwd Packets_Rate
+2025-03-29 15:53:22,407 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Packets_Rate
+2025-03-29 15:53:22,407 - src.feature_engineering - INFO - Created rate feature: Flow Bytes/s_Rate
+2025-03-29 15:53:22,408 - src.feature_engineering - INFO - Created rate feature: Fwd Avg Bytes/Bulk_Rate
+2025-03-29 15:53:22,408 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Bytes/Bulk_Rate
+2025-03-29 15:53:22,408 - src.feature_engineering - INFO - Created rate feature:  Subflow Fwd Bytes_Rate
+2025-03-29 15:53:22,409 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Bytes_Rate
+2025-03-29 15:53:22,410 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Ratio
+2025-03-29 15:53:22,411 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Ratio
+2025-03-29 15:53:22,412 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Ratio
+2025-03-29 15:53:22,412 - src.feature_engineering - INFO - Created ratio feature:  IAT Total_Ratio
+2025-03-29 15:53:22,413 - src.feature_engineering - INFO - Created ratio feature:   IAT Mean_Ratio
+2025-03-29 15:53:22,414 - src.feature_engineering - INFO - Created ratio feature:   IAT Std_Ratio
+2025-03-29 15:53:22,415 - src.feature_engineering - INFO - Created ratio feature:   IAT Max_Ratio
+2025-03-29 15:53:22,415 - src.feature_engineering - INFO - Created ratio feature:   IAT Min_Ratio
+2025-03-29 15:53:22,416 - src.feature_engineering - INFO - Created ratio feature:   URG Flags_Ratio
+2025-03-29 15:53:22,417 - src.feature_engineering - INFO - Created ratio feature:   Header Length_Ratio
+2025-03-29 15:53:22,418 - src.feature_engineering - INFO - Created ratio feature:  Avg  Segment Size_Ratio
+2025-03-29 15:53:22,418 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Ratio
+2025-03-29 15:53:22,419 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Ratio
+2025-03-29 15:53:22,420 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Rate_Ratio
+2025-03-29 15:53:22,420 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Rate_Ratio
+2025-03-29 15:53:22,421 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Rate_Ratio
+2025-03-29 15:53:22,422 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Rate_Ratio
+2025-03-29 15:53:22,422 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Rate_Ratio
+2025-03-29 15:53:22,425 - src.feature_engineering - INFO - Created interaction feature:   Packet Length Mean_Rate_Ratio_x_  Avg Packets/Bulk_Rate_Ratio
+2025-03-29 15:53:22,425 - src.feature_engineering - INFO - Created interaction feature:  Fwd Avg Bulk Rate_x_ Subflow Fwd Bytes_Rate
+2025-03-29 15:53:22,426 - src.feature_engineering - INFO - Added 50 new engineered features
+2025-03-29 15:53:22,426 - src.feature_engineering - INFO - 
+=== Selecting 20 Best Features using ANOVA ===
+2025-03-29 15:53:22,427 - src.anomaly_detector - ERROR - Error preprocessing data: estimator requires y to be passed, but the target y is None
+2025-03-29 15:53:22,427 - src.anomaly_detector - ERROR - Prediction error: estimator requires y to be passed, but the target y is None
+2025-03-29 15:53:22,427 - __main__ - ERROR - Error during processing: estimator requires y to be passed, but the target y is None
+2025-03-29 15:53:22,431 - __main__ - ERROR - Traceback (most recent call last):
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\predict.py", line 95, in main
+    y_pred, y_proba = detector.predict(data, args.target_column)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\anomaly_detector.py", line 239, in predict
+    X_final = self.preprocess_data(data, target_column)
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\anomaly_detector.py", line 206, in preprocess_data
+    X_selected, _ = self.feature_engineer.select_features(
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        X_engineered, None, engineered_feature_names,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        method='anova', k=20)  # Assuming 20 features were selected during training
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\feature_engineering.py", line 201, in select_features
+    X_selected = self.feature_selector.fit_transform(X, y)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\_set_output.py", line 319, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\base.py", line 918, in fit_transform
+    return self.fit(X, **fit_params).transform(X)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\base.py", line 1389, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\feature_selection\_univariate_selection.py", line 569, in fit
+    score_func_ret = self.score_func(X, y)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\_param_validation.py", line 189, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\feature_selection\_univariate_selection.py", line 170, in f_classif
+    X, y = check_X_y(X, y, accept_sparse=["csr", "csc", "coo"])
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\validation.py", line 1364, in check_X_y
+    raise ValueError(
+        f"{estimator_name} requires y to be passed, but the target y is None"
+    )
+ValueError: estimator requires y to be passed, but the target y is None
+
+2025-03-29 15:57:58,340 - __main__ - INFO - Initializing anomaly detector...
+2025-03-29 15:57:58,449 - src.anomaly_detector - INFO - Loaded model from models/best_model.joblib
+2025-03-29 15:57:58,452 - src.anomaly_detector - INFO - Loaded preprocessor from models/preprocessor.joblib
+2025-03-29 15:57:58,772 - src.anomaly_detector - INFO - Loaded feature engineer from models/feature_engineer.joblib
+2025-03-29 15:57:58,773 - __main__ - INFO - Loading data from data/test_data.csv...
+2025-03-29 15:57:58,779 - __main__ - INFO - Loaded data with shape: (1000, 79)
+2025-03-29 15:57:58,780 - __main__ - INFO - Target column ' Label' found in data
+2025-03-29 15:57:58,780 - __main__ - INFO - Making predictions...
+2025-03-29 15:57:58,799 - src.feature_engineering - INFO - 
+=== Engineering New Features ===
+2025-03-29 15:57:58,800 - src.feature_engineering - INFO - Created rate feature:  Total Fwd Packets_Rate
+2025-03-29 15:57:58,801 - src.feature_engineering - INFO - Created rate feature:  Total Backward Packets_Rate
+2025-03-29 15:57:58,801 - src.feature_engineering - INFO - Created rate feature: Total Length of Fwd Packets_Rate
+2025-03-29 15:57:58,802 - src.feature_engineering - INFO - Created rate feature:  Total Length of Bwd Packets_Rate
+2025-03-29 15:57:58,802 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Max_Rate
+2025-03-29 15:57:58,802 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Min_Rate
+2025-03-29 15:57:58,803 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Mean_Rate
+2025-03-29 15:57:58,803 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Std_Rate
+2025-03-29 15:57:58,804 - src.feature_engineering - INFO - Created rate feature: Bwd Packet Length Max_Rate
+2025-03-29 15:57:58,804 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Min_Rate
+2025-03-29 15:57:58,804 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Mean_Rate
+2025-03-29 15:57:58,805 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Std_Rate
+2025-03-29 15:57:58,805 - src.feature_engineering - INFO - Created rate feature:  Flow Packets/s_Rate
+2025-03-29 15:57:58,805 - src.feature_engineering - INFO - Created rate feature: Fwd Packets/s_Rate
+2025-03-29 15:57:58,805 - src.feature_engineering - INFO - Created rate feature:  Bwd Packets/s_Rate
+2025-03-29 15:57:58,806 - src.feature_engineering - INFO - Created rate feature:  Min Packet Length_Rate
+2025-03-29 15:57:58,806 - src.feature_engineering - INFO - Created rate feature:  Max Packet Length_Rate
+2025-03-29 15:57:58,806 - src.feature_engineering - INFO - Created rate feature:  Packet Length Mean_Rate
+2025-03-29 15:57:58,807 - src.feature_engineering - INFO - Created rate feature:  Packet Length Std_Rate
+2025-03-29 15:57:58,807 - src.feature_engineering - INFO - Created rate feature:  Packet Length Variance_Rate
+2025-03-29 15:57:58,807 - src.feature_engineering - INFO - Created rate feature:  Average Packet Size_Rate
+2025-03-29 15:57:58,808 - src.feature_engineering - INFO - Created rate feature:  Fwd Avg Packets/Bulk_Rate
+2025-03-29 15:57:58,808 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Packets/Bulk_Rate
+2025-03-29 15:57:58,809 - src.feature_engineering - INFO - Created rate feature: Subflow Fwd Packets_Rate
+2025-03-29 15:57:58,809 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Packets_Rate
+2025-03-29 15:57:58,809 - src.feature_engineering - INFO - Created rate feature: Flow Bytes/s_Rate
+2025-03-29 15:57:58,810 - src.feature_engineering - INFO - Created rate feature: Fwd Avg Bytes/Bulk_Rate
+2025-03-29 15:57:58,810 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Bytes/Bulk_Rate
+2025-03-29 15:57:58,811 - src.feature_engineering - INFO - Created rate feature:  Subflow Fwd Bytes_Rate
+2025-03-29 15:57:58,811 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Bytes_Rate
+2025-03-29 15:57:58,813 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Ratio
+2025-03-29 15:57:58,813 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Ratio
+2025-03-29 15:57:58,814 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Ratio
+2025-03-29 15:57:58,815 - src.feature_engineering - INFO - Created ratio feature:  IAT Total_Ratio
+2025-03-29 15:57:58,815 - src.feature_engineering - INFO - Created ratio feature:   IAT Mean_Ratio
+2025-03-29 15:57:58,816 - src.feature_engineering - INFO - Created ratio feature:   IAT Std_Ratio
+2025-03-29 15:57:58,817 - src.feature_engineering - INFO - Created ratio feature:   IAT Max_Ratio
+2025-03-29 15:57:58,818 - src.feature_engineering - INFO - Created ratio feature:   IAT Min_Ratio
+2025-03-29 15:57:58,819 - src.feature_engineering - INFO - Created ratio feature:   URG Flags_Ratio
+2025-03-29 15:57:58,819 - src.feature_engineering - INFO - Created ratio feature:   Header Length_Ratio
+2025-03-29 15:57:58,820 - src.feature_engineering - INFO - Created ratio feature:  Avg  Segment Size_Ratio
+2025-03-29 15:57:58,821 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Ratio
+2025-03-29 15:57:58,821 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Ratio
+2025-03-29 15:57:58,822 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Rate_Ratio
+2025-03-29 15:57:58,823 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Rate_Ratio
+2025-03-29 15:57:58,824 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Rate_Ratio
+2025-03-29 15:57:58,825 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Rate_Ratio
+2025-03-29 15:57:58,825 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Rate_Ratio
+2025-03-29 15:57:58,828 - src.feature_engineering - INFO - Created interaction feature: Bwd Packet Length Max_x_ Total Length of Bwd Packets_Rate
+2025-03-29 15:57:58,828 - src.feature_engineering - INFO - Created interaction feature: Bwd Packet Length Max_x_ Bwd Packet Length Min
+2025-03-29 15:57:58,829 - src.feature_engineering - INFO - Created interaction feature: Bwd Packet Length Max_x_ Total Fwd Packets_Rate
+2025-03-29 15:57:58,829 - src.feature_engineering - INFO - Created interaction feature: Bwd Packet Length Max_x_ Bwd IAT Std
+2025-03-29 15:57:58,830 - src.feature_engineering - INFO - Created interaction feature: Bwd Packet Length Max_x_ Total Fwd Packets
+2025-03-29 15:57:58,830 - src.feature_engineering - INFO - Created interaction feature: Bwd Packet Length Max_x_ Total Backward Packets_Rate
+2025-03-29 15:57:58,831 - src.feature_engineering - INFO - Created interaction feature: Bwd Packet Length Max_x_ Bwd Packets/s
+2025-03-29 15:57:58,831 - src.feature_engineering - INFO - Created interaction feature:  Total Length of Bwd Packets_Rate_x_ Bwd Packet Length Min
+2025-03-29 15:57:58,832 - src.feature_engineering - INFO - Created interaction feature:  Total Length of Bwd Packets_Rate_x_ Total Fwd Packets_Rate
+2025-03-29 15:57:58,832 - src.feature_engineering - INFO - Created interaction feature:  Total Length of Bwd Packets_Rate_x_ Bwd IAT Std
+2025-03-29 15:57:58,832 - src.feature_engineering - INFO - Created interaction feature:  Total Length of Bwd Packets_Rate_x_ Total Fwd Packets
+2025-03-29 15:57:58,832 - src.feature_engineering - INFO - Created interaction feature:  Total Length of Bwd Packets_Rate_x_ Total Backward Packets_Rate
+2025-03-29 15:57:58,833 - src.feature_engineering - INFO - Created interaction feature:  Total Length of Bwd Packets_Rate_x_ Bwd Packets/s
+2025-03-29 15:57:58,833 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Min_x_ Total Fwd Packets_Rate
+2025-03-29 15:57:58,833 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Min_x_ Bwd IAT Std
+2025-03-29 15:57:58,834 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Min_x_ Total Fwd Packets
+2025-03-29 15:57:58,834 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Min_x_ Total Backward Packets_Rate
+2025-03-29 15:57:58,835 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Min_x_ Bwd Packets/s
+2025-03-29 15:57:58,835 - src.feature_engineering - INFO - Created interaction feature:  Total Fwd Packets_Rate_x_ Fwd URG Flags
+2025-03-29 15:57:58,835 - src.feature_engineering - INFO - Created interaction feature:  Total Fwd Packets_Rate_x_ Total Fwd Packets
+2025-03-29 15:57:58,835 - src.feature_engineering - INFO - Created interaction feature:  Total Fwd Packets_Rate_x_ Total Backward Packets_Rate
+2025-03-29 15:57:58,836 - src.feature_engineering - INFO - Created interaction feature:  Total Fwd Packets_Rate_x_ Bwd Packets/s
+2025-03-29 15:57:58,836 - src.feature_engineering - INFO - Created interaction feature:  Fwd URG Flags_x_ Total Fwd Packets
+2025-03-29 15:57:58,836 - src.feature_engineering - INFO - Created interaction feature:  Bwd IAT Std_x_ Bwd Packets/s
+2025-03-29 15:57:58,836 - src.feature_engineering - INFO - Created interaction feature:  Total Fwd Packets_x_ Total Backward Packets_Rate
+2025-03-29 15:57:58,837 - src.feature_engineering - INFO - Created interaction feature:  Total Fwd Packets_x_ Bwd Packets/s
+2025-03-29 15:57:58,837 - src.feature_engineering - INFO - Created interaction feature:  Total Backward Packets_Rate_x_ Bwd Packets/s
+2025-03-29 15:57:58,838 - src.feature_engineering - INFO - Added 75 new engineered features
+2025-03-29 15:57:58,838 - src.anomaly_detector - ERROR - Error preprocessing data: X has 153 features, but SelectKBest is expecting 145 features as input.
+2025-03-29 15:57:58,838 - src.anomaly_detector - ERROR - Prediction error: X has 153 features, but SelectKBest is expecting 145 features as input.
+2025-03-29 15:57:58,838 - __main__ - ERROR - Error during processing: X has 153 features, but SelectKBest is expecting 145 features as input.
+2025-03-29 15:57:58,841 - __main__ - ERROR - Traceback (most recent call last):
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\predict.py", line 95, in main
+    y_pred, y_proba = detector.predict(data, args.target_column)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\anomaly_detector.py", line 237, in predict
+    X_final = self.preprocess_data(data, target_column)
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\anomaly_detector.py", line 206, in preprocess_data
+    X_selected = self.feature_engineer.transform_feature_selection(X_engineered)  # Assuming 20 features were selected during training
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\feature_engineering.py", line 375, in transform_feature_selection
+    return self.feature_selector.transform(X)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\_set_output.py", line 319, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\feature_selection\_base.py", line 107, in transform
+    X = validate_data(
+        self,
+    ...<5 lines>...
+        reset=False,
+    )
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\validation.py", line 2965, in validate_data
+    _check_n_features(_estimator, X, reset=reset)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\validation.py", line 2829, in _check_n_features
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: X has 153 features, but SelectKBest is expecting 145 features as input.
+
+2025-03-29 16:01:30,481 - __main__ - INFO - Initializing anomaly detector...
+2025-03-29 16:01:30,588 - src.anomaly_detector - INFO - Loaded model from models/best_model.joblib
+2025-03-29 16:01:30,590 - src.anomaly_detector - INFO - Loaded preprocessor from models/preprocessor.joblib
+2025-03-29 16:01:30,903 - src.anomaly_detector - INFO - Loaded feature engineer from models/feature_engineer.joblib
+2025-03-29 16:01:30,904 - __main__ - INFO - Loading data from data/test_data.csv...
+2025-03-29 16:01:30,910 - __main__ - INFO - Loaded data with shape: (1000, 79)
+2025-03-29 16:01:30,910 - __main__ - INFO - Target column ' Label' found in data
+2025-03-29 16:01:30,910 - __main__ - INFO - Making predictions...
+2025-03-29 16:01:30,929 - src.feature_engineering - INFO - 
+=== Engineering New Features ===
+2025-03-29 16:01:30,930 - src.feature_engineering - INFO - Created rate feature:  Total Fwd Packets_Rate
+2025-03-29 16:01:30,931 - src.feature_engineering - INFO - Created rate feature:  Total Backward Packets_Rate
+2025-03-29 16:01:30,931 - src.feature_engineering - INFO - Created rate feature: Total Length of Fwd Packets_Rate
+2025-03-29 16:01:30,931 - src.feature_engineering - INFO - Created rate feature:  Total Length of Bwd Packets_Rate
+2025-03-29 16:01:30,931 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Max_Rate
+2025-03-29 16:01:30,932 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Min_Rate
+2025-03-29 16:01:30,932 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Mean_Rate
+2025-03-29 16:01:30,932 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Std_Rate
+2025-03-29 16:01:30,933 - src.feature_engineering - INFO - Created rate feature: Bwd Packet Length Max_Rate
+2025-03-29 16:01:30,933 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Min_Rate
+2025-03-29 16:01:30,934 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Mean_Rate
+2025-03-29 16:01:30,934 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Std_Rate
+2025-03-29 16:01:30,935 - src.feature_engineering - INFO - Created rate feature:  Flow Packets/s_Rate
+2025-03-29 16:01:30,935 - src.feature_engineering - INFO - Created rate feature: Fwd Packets/s_Rate
+2025-03-29 16:01:30,936 - src.feature_engineering - INFO - Created rate feature:  Bwd Packets/s_Rate
+2025-03-29 16:01:30,936 - src.feature_engineering - INFO - Created rate feature:  Min Packet Length_Rate
+2025-03-29 16:01:30,937 - src.feature_engineering - INFO - Created rate feature:  Max Packet Length_Rate
+2025-03-29 16:01:30,937 - src.feature_engineering - INFO - Created rate feature:  Packet Length Mean_Rate
+2025-03-29 16:01:30,938 - src.feature_engineering - INFO - Created rate feature:  Packet Length Std_Rate
+2025-03-29 16:01:30,938 - src.feature_engineering - INFO - Created rate feature:  Packet Length Variance_Rate
+2025-03-29 16:01:30,938 - src.feature_engineering - INFO - Created rate feature:  Average Packet Size_Rate
+2025-03-29 16:01:30,939 - src.feature_engineering - INFO - Created rate feature:  Fwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:30,939 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:30,940 - src.feature_engineering - INFO - Created rate feature: Subflow Fwd Packets_Rate
+2025-03-29 16:01:30,940 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Packets_Rate
+2025-03-29 16:01:30,940 - src.feature_engineering - INFO - Created rate feature: Flow Bytes/s_Rate
+2025-03-29 16:01:30,941 - src.feature_engineering - INFO - Created rate feature: Fwd Avg Bytes/Bulk_Rate
+2025-03-29 16:01:30,941 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Bytes/Bulk_Rate
+2025-03-29 16:01:30,941 - src.feature_engineering - INFO - Created rate feature:  Subflow Fwd Bytes_Rate
+2025-03-29 16:01:30,942 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Bytes_Rate
+2025-03-29 16:01:30,943 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Ratio
+2025-03-29 16:01:30,943 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Ratio
+2025-03-29 16:01:30,944 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Ratio
+2025-03-29 16:01:30,944 - src.feature_engineering - INFO - Created ratio feature:  IAT Total_Ratio
+2025-03-29 16:01:30,945 - src.feature_engineering - INFO - Created ratio feature:   IAT Mean_Ratio
+2025-03-29 16:01:30,945 - src.feature_engineering - INFO - Created ratio feature:   IAT Std_Ratio
+2025-03-29 16:01:30,946 - src.feature_engineering - INFO - Created ratio feature:   IAT Max_Ratio
+2025-03-29 16:01:30,946 - src.feature_engineering - INFO - Created ratio feature:   IAT Min_Ratio
+2025-03-29 16:01:30,947 - src.feature_engineering - INFO - Created ratio feature:   URG Flags_Ratio
+2025-03-29 16:01:30,947 - src.feature_engineering - INFO - Created ratio feature:   Header Length_Ratio
+2025-03-29 16:01:30,948 - src.feature_engineering - INFO - Created ratio feature:  Avg  Segment Size_Ratio
+2025-03-29 16:01:30,948 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Ratio
+2025-03-29 16:01:30,949 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Ratio
+2025-03-29 16:01:30,949 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Rate_Ratio
+2025-03-29 16:01:30,950 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Rate_Ratio
+2025-03-29 16:01:30,951 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Rate_Ratio
+2025-03-29 16:01:30,951 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Rate_Ratio
+2025-03-29 16:01:30,952 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Rate_Ratio
+2025-03-29 16:01:30,954 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_Rate_x_ Packet Length Mean_Rate
+2025-03-29 16:01:30,955 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_Rate_x_ Bwd Packet Length Min_Rate
+2025-03-29 16:01:30,955 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_Rate_x_Fwd Packets/s_Rate
+2025-03-29 16:01:30,956 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_Rate_x_ Fwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:30,956 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_Rate_x_Bwd Packet Length Max_Rate
+2025-03-29 16:01:30,957 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Mean_Rate_x_ Bwd Packet Length Min_Rate
+2025-03-29 16:01:30,957 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Mean_Rate_x_Fwd Packets/s_Rate
+2025-03-29 16:01:30,957 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Mean_Rate_x_ Fwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:30,958 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Mean_Rate_x_Bwd Packet Length Max_Rate
+2025-03-29 16:01:30,958 - src.feature_engineering - INFO - Created interaction feature:  Subflow Fwd Bytes_x_Fwd Packets/s_Rate
+2025-03-29 16:01:30,958 - src.feature_engineering - INFO - Created interaction feature:  Subflow Fwd Bytes_x_ Fwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:30,959 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Min_Rate_x_Fwd Packets/s_Rate
+2025-03-29 16:01:30,959 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Min_Rate_x_ Fwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:30,960 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Min_Rate_x_Bwd Packet Length Max_Rate
+2025-03-29 16:01:30,960 - src.feature_engineering - INFO - Created interaction feature: Fwd Packets/s_Rate_x_ Fwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:30,960 - src.feature_engineering - INFO - Created interaction feature: Fwd Packets/s_Rate_x_Bwd Packet Length Max_Rate
+2025-03-29 16:01:30,961 - src.feature_engineering - INFO - Created interaction feature:  Fwd Avg Packets/Bulk_Rate_x_Bwd Packet Length Max_Rate
+2025-03-29 16:01:30,961 - src.feature_engineering - INFO - Added 65 new engineered features
+2025-03-29 16:01:30,961 - src.feature_engineering - WARNING - Feature count mismatch: SelectKBest expects 145 features but got 143.
+2025-03-29 16:01:30,963 - src.feature_engineering - WARNING - Falling back to selecting top 20 features by variance
+2025-03-29 16:01:30,963 - src.anomaly_detector - INFO - Preprocessed data shape: (1000, 20)
+2025-03-29 16:01:31,004 - __main__ - INFO - Saved predictions to results\test_data_predictions_20250329_160130.csv
+2025-03-29 16:01:31,004 - __main__ - INFO - Evaluating predictions...
+2025-03-29 16:01:31,020 - src.feature_engineering - INFO - 
+=== Engineering New Features ===
+2025-03-29 16:01:31,021 - src.feature_engineering - INFO - Created rate feature:  Total Fwd Packets_Rate
+2025-03-29 16:01:31,021 - src.feature_engineering - INFO - Created rate feature:  Total Backward Packets_Rate
+2025-03-29 16:01:31,021 - src.feature_engineering - INFO - Created rate feature: Total Length of Fwd Packets_Rate
+2025-03-29 16:01:31,022 - src.feature_engineering - INFO - Created rate feature:  Total Length of Bwd Packets_Rate
+2025-03-29 16:01:31,022 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Max_Rate
+2025-03-29 16:01:31,023 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Min_Rate
+2025-03-29 16:01:31,023 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Mean_Rate
+2025-03-29 16:01:31,023 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Std_Rate
+2025-03-29 16:01:31,024 - src.feature_engineering - INFO - Created rate feature: Bwd Packet Length Max_Rate
+2025-03-29 16:01:31,024 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Min_Rate
+2025-03-29 16:01:31,025 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Mean_Rate
+2025-03-29 16:01:31,025 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Std_Rate
+2025-03-29 16:01:31,025 - src.feature_engineering - INFO - Created rate feature:  Flow Packets/s_Rate
+2025-03-29 16:01:31,025 - src.feature_engineering - INFO - Created rate feature: Fwd Packets/s_Rate
+2025-03-29 16:01:31,026 - src.feature_engineering - INFO - Created rate feature:  Bwd Packets/s_Rate
+2025-03-29 16:01:31,026 - src.feature_engineering - INFO - Created rate feature:  Min Packet Length_Rate
+2025-03-29 16:01:31,026 - src.feature_engineering - INFO - Created rate feature:  Max Packet Length_Rate
+2025-03-29 16:01:31,027 - src.feature_engineering - INFO - Created rate feature:  Packet Length Mean_Rate
+2025-03-29 16:01:31,027 - src.feature_engineering - INFO - Created rate feature:  Packet Length Std_Rate
+2025-03-29 16:01:31,027 - src.feature_engineering - INFO - Created rate feature:  Packet Length Variance_Rate
+2025-03-29 16:01:31,028 - src.feature_engineering - INFO - Created rate feature:  Average Packet Size_Rate
+2025-03-29 16:01:31,028 - src.feature_engineering - INFO - Created rate feature:  Fwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:31,028 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Packets/Bulk_Rate
+2025-03-29 16:01:31,029 - src.feature_engineering - INFO - Created rate feature: Subflow Fwd Packets_Rate
+2025-03-29 16:01:31,029 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Packets_Rate
+2025-03-29 16:01:31,029 - src.feature_engineering - INFO - Created rate feature: Flow Bytes/s_Rate
+2025-03-29 16:01:31,030 - src.feature_engineering - INFO - Created rate feature: Fwd Avg Bytes/Bulk_Rate
+2025-03-29 16:01:31,030 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Bytes/Bulk_Rate
+2025-03-29 16:01:31,030 - src.feature_engineering - INFO - Created rate feature:  Subflow Fwd Bytes_Rate
+2025-03-29 16:01:31,031 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Bytes_Rate
+2025-03-29 16:01:31,032 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Ratio
+2025-03-29 16:01:31,032 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Ratio
+2025-03-29 16:01:31,033 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Ratio
+2025-03-29 16:01:31,033 - src.feature_engineering - INFO - Created ratio feature:  IAT Total_Ratio
+2025-03-29 16:01:31,034 - src.feature_engineering - INFO - Created ratio feature:   IAT Mean_Ratio
+2025-03-29 16:01:31,034 - src.feature_engineering - INFO - Created ratio feature:   IAT Std_Ratio
+2025-03-29 16:01:31,035 - src.feature_engineering - INFO - Created ratio feature:   IAT Max_Ratio
+2025-03-29 16:01:31,036 - src.feature_engineering - INFO - Created ratio feature:   IAT Min_Ratio
+2025-03-29 16:01:31,037 - src.feature_engineering - INFO - Created ratio feature:   URG Flags_Ratio
+2025-03-29 16:01:31,037 - src.feature_engineering - INFO - Created ratio feature:   Header Length_Ratio
+2025-03-29 16:01:31,038 - src.feature_engineering - INFO - Created ratio feature:  Avg  Segment Size_Ratio
+2025-03-29 16:01:31,039 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Ratio
+2025-03-29 16:01:31,039 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Ratio
+2025-03-29 16:01:31,040 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Rate_Ratio
+2025-03-29 16:01:31,041 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Rate_Ratio
+2025-03-29 16:01:31,041 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Rate_Ratio
+2025-03-29 16:01:31,042 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Rate_Ratio
+2025-03-29 16:01:31,042 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Rate_Ratio
+2025-03-29 16:01:31,045 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_x_ Fwd Packet Length Std_Rate
+2025-03-29 16:01:31,045 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_x_ Fwd Avg Packets/Bulk
+2025-03-29 16:01:31,046 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_x_ Fwd Packet Length Mean_Rate
+2025-03-29 16:01:31,046 - src.feature_engineering - INFO - Created interaction feature:  Packet Length Std_x_ Fwd Packet Length Max
+2025-03-29 16:01:31,046 - src.feature_engineering - INFO - Created interaction feature:  Fwd Packet Length Std_Rate_x_ Fwd Avg Packets/Bulk
+2025-03-29 16:01:31,047 - src.feature_engineering - INFO - Created interaction feature:  Fwd Packet Length Std_Rate_x_ Fwd Packet Length Mean_Rate
+2025-03-29 16:01:31,047 - src.feature_engineering - INFO - Created interaction feature:  Fwd Packet Length Std_Rate_x_ Fwd IAT Max
+2025-03-29 16:01:31,048 - src.feature_engineering - INFO - Created interaction feature:  Fwd Packet Length Std_Rate_x_ Fwd Packet Length Max
+2025-03-29 16:01:31,048 - src.feature_engineering - INFO - Created interaction feature:  Fwd Avg Packets/Bulk_x_ Fwd Packet Length Mean_Rate
+2025-03-29 16:01:31,048 - src.feature_engineering - INFO - Created interaction feature:  Fwd Avg Packets/Bulk_x_ Fwd IAT Max
+2025-03-29 16:01:31,049 - src.feature_engineering - INFO - Created interaction feature:  Fwd Avg Packets/Bulk_x_ Fwd Packet Length Max
+2025-03-29 16:01:31,049 - src.feature_engineering - INFO - Created interaction feature:  Fwd Packet Length Mean_Rate_x_ Fwd IAT Max
+2025-03-29 16:01:31,049 - src.feature_engineering - INFO - Created interaction feature:  Fwd Packet Length Mean_Rate_x_ Fwd Packet Length Max
+2025-03-29 16:01:31,050 - src.feature_engineering - INFO - Created interaction feature:  Fwd IAT Max_x_ Fwd Packet Length Max
+2025-03-29 16:01:31,050 - src.feature_engineering - INFO - Added 62 new engineered features
+2025-03-29 16:01:31,050 - src.feature_engineering - WARNING - Feature count mismatch: SelectKBest expects 145 features but got 140.
+2025-03-29 16:01:31,051 - src.feature_engineering - WARNING - Falling back to selecting top 20 features by variance
+2025-03-29 16:01:31,052 - src.anomaly_detector - INFO - Preprocessed data shape: (1000, 20)
+2025-03-29 16:01:31,072 - src.anomaly_detector - INFO - Evaluation metrics:
+2025-03-29 16:01:31,072 - src.anomaly_detector - INFO - Accuracy: 0.9920
+2025-03-29 16:01:31,072 - src.anomaly_detector - INFO - Precision: 1.0000
+2025-03-29 16:01:31,072 - src.anomaly_detector - INFO - Recall: 0.9920
+2025-03-29 16:01:31,073 - src.anomaly_detector - INFO - F1 Score: 0.9960
+2025-03-29 16:01:31,075 - __main__ - INFO - Saved evaluation metrics to results\test_data_metrics_20250329_160130.json
+2025-03-29 16:01:31,075 - __main__ - INFO - Processing completed successfully

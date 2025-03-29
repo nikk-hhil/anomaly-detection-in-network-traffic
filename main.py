@@ -13,12 +13,16 @@ from src.model_trainer import ModelTrainer
 from src.evaluator import ModelEvaluator
 from src.visualizer import DataVisualizer
 
-# Configure logging
+# New base directory
+PROJECT_BASE_DIR = "C:\\Users\\khatr\\OneDrive\\Documents\\InternshipProjects\\Anomaly detection\\anomaly-detection-in-network-traffic"
+
+# Configure logging with absolute path
+log_path = os.path.join(PROJECT_BASE_DIR, "network_anomaly_detection.log")
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("network_anomaly_detection.log"),
+        logging.FileHandler(log_path),
         logging.StreamHandler()
     ]
 )
@@ -28,9 +32,12 @@ def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Network Traffic Anomaly Detection Pipeline')
     
-    parser.add_argument('--data-dir', type=str, default='./data', 
+    # Update default paths to use absolute paths with the new location
+    parser.add_argument('--data-dir', type=str, 
+                        default=os.path.join(PROJECT_BASE_DIR, 'data'), 
                         help='Directory containing the dataset files')
-    parser.add_argument('--output-dir', type=str, default='./models',
+    parser.add_argument('--output-dir', type=str, 
+                        default=os.path.join(PROJECT_BASE_DIR, 'models'),
                         help='Directory to save models and results')
     parser.add_argument('--target-column', type=str, default=None,
                         help='Name of the target column in the dataset')
@@ -55,8 +62,8 @@ def main():
     args = parse_arguments()
     
     try:
-        # 1. Set up project directories
-        base_dir = os.path.dirname(os.path.abspath(__file__))
+        # 1. Set up project directories with absolute paths
+        base_dir = PROJECT_BASE_DIR
         data_dir = args.data_dir
         models_dir = args.output_dir
         processed_data_path = os.path.join(data_dir, "processed", "merged_data.csv")
@@ -65,6 +72,7 @@ def main():
         os.makedirs(os.path.join(data_dir, "processed"), exist_ok=True)
         os.makedirs(models_dir, exist_ok=True)
         
+        # Rest of the code remains the same
         # 2. Load and merge dataset
         logger.info("=== Step 1: Loading dataset ===")
         try:
@@ -191,7 +199,7 @@ def main():
                             'n_jobs': 1,                      # Single thread to reduce memory
                             'fallback_to_randomized': True,
                             'n_randomized_iterations': 5      # Fewer iterations
-})
+            })
             
             # Split data
             X_train, X_test, y_train, y_test = model_trainer.split_data(

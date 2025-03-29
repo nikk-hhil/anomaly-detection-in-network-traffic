@@ -1,62 +1,67 @@
+import os
+import joblib
 import numpy as np
 import pandas as pd
-import joblib
 import logging
-import os
-from typing import Dict, List, Tuple, Any, Optional, Union
-from sklearn.base import BaseEstimator
-from sklearn.linear_model import LogisticRegression
-import warnings
+from typing import Dict, Tuple, Optional, List, Any
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, f1_score
 
-# Get logger
+# Set up logger
 logger = logging.getLogger(__name__)
 
 class AnomalyDetector:
     """
-    Class for detecting network traffic anomalies using trained models.
+    Class for detecting anomalies in network traffic using trained models.
     """
     
-    def __init__(self, model_path: str = None, preprocessor_path: str = None, 
-                feature_engineer_path: str = None, threshold: float = 0.5):
+    def __init__(self, model_path: str, preprocessor_path: str, 
+                feature_engineer_path: str, threshold: float = 0.5,
+                output_dir: str = './results'):
         """
-        Initialize AnomalyDetector with trained model and preprocessing components.
+        Initialize the anomaly detector.
         
         Parameters:
         -----------
         model_path : str
-            Path to the trained model
+            Path to the trained model file
         preprocessor_path : str
-            Path to the preprocessor
+            Path to the preprocessor file
         feature_engineer_path : str
-            Path to the feature engineer
+            Path to the feature engineer file
         threshold : float
-            Probability threshold for anomaly detection (default: 0.5)
+            Probability threshold for anomaly detection
+        output_dir : str
+            Directory to save results
         """
+        self.model_path = model_path
+        self.preprocessor_path = preprocessor_path
+        self.feature_engineer_path = feature_engineer_path
+        self.threshold = threshold
+        self.output_dir = output_dir
+        
+        # Load components
         self.model = None
         self.preprocessor = None
         self.feature_engineer = None
-        self.threshold = threshold
-        self.label_mapping = {}
-        self.inverse_label_mapping = {}
         
-        # Load components if paths are provided
-        if model_path and os.path.exists(model_path):
-            self.load_model(model_path)
+        self.label_mapping = None
+        self.inverse_label_mapping = None
         
-        if preprocessor_path and os.path.exists(preprocessor_path):
-            self.load_preprocessor(preprocessor_path)
+        os.makedirs(output_dir, exist_ok=True)
         
-        if feature_engineer_path and os.path.exists(feature_engineer_path):
-            self.load_feature_engineer(feature_engineer_path)
+        # Load the model and preprocessing components
+        self.load_model(model_path)
+        self.load_preprocessor(preprocessor_path)
+        self.load_feature_engineer(feature_engineer_path)
     
     def load_model(self, model_path: str) -> None:
         """
-        Load trained model from file.
+        Load the trained model.
         
         Parameters:
         -----------
         model_path : str
-            Path to the trained model
+            Path to the model file
         """
         try:
             self.model = joblib.load(model_path)
@@ -67,23 +72,21 @@ class AnomalyDetector:
     
     def load_preprocessor(self, preprocessor_path: str) -> None:
         """
-        Load preprocessor from file.
+        Load the preprocessor.
         
         Parameters:
         -----------
         preprocessor_path : str
-            Path to the preprocessor
+            Path to the preprocessor file
         """
         try:
             self.preprocessor = joblib.load(preprocessor_path)
             logger.info(f"Loaded preprocessor from {preprocessor_path}")
             
-            # Extract label mapping if available
+            # Extract label mapping from preprocessor if available
             if hasattr(self.preprocessor, 'label_encoder') and self.preprocessor.label_encoder is not None:
-                classes = self.preprocessor.label_encoder.classes_
-                indices = range(len(classes))
-                self.label_mapping = dict(zip(indices, classes))
-                self.inverse_label_mapping = dict(zip(classes, indices))
+                self.label_mapping = {i: label for i, label in enumerate(self.preprocessor.label_encoder.classes_)}
+                self.inverse_label_mapping = {label: i for i, label in self.label_mapping.items()}
                 logger.info(f"Extracted label mapping: {self.label_mapping}")
         except Exception as e:
             logger.error(f"Error loading preprocessor: {e}")
@@ -91,12 +94,12 @@ class AnomalyDetector:
     
     def load_feature_engineer(self, feature_engineer_path: str) -> None:
         """
-        Load feature engineer from file.
+        Load the feature engineer.
         
         Parameters:
         -----------
         feature_engineer_path : str
-            Path to the feature engineer
+            Path to the feature engineer file
         """
         try:
             self.feature_engineer = joblib.load(feature_engineer_path)
@@ -105,24 +108,9 @@ class AnomalyDetector:
             logger.error(f"Error loading feature engineer: {e}")
             raise
     
-    def set_threshold(self, threshold: float) -> None:
-        """
-        Set probability threshold for anomaly detection.
-        
-        Parameters:
-        -----------
-        threshold : float
-            Probability threshold (0.0 to 1.0)
-        """
-        if not 0 <= threshold <= 1:
-            raise ValueError("Threshold must be between 0 and 1")
-        
-        self.threshold = threshold
-        logger.info(f"Set detection threshold to {threshold}")
-    
     def _get_class_name(self, class_idx: int) -> str:
         """
-        Get class name from class index.
+        Get the class name for a given class index.
         
         Parameters:
         -----------
@@ -134,280 +122,219 @@ class AnomalyDetector:
         str
             Class name
         """
-        return self.label_mapping.get(class_idx, f"Class_{class_idx}")
+        if self.label_mapping and class_idx in self.label_mapping:
+            return self.label_mapping[class_idx]
+        return f"Class_{class_idx}"
+    
+    def set_threshold(self, threshold: float) -> None:
+        """
+        Set the detection threshold.
+        
+        Parameters:
+        -----------
+        threshold : float
+            New threshold value
+        """
+        self.threshold = threshold
+        logger.info(f"Set detection threshold to {threshold}")
     
     def preprocess_data(self, data: pd.DataFrame, target_column: Optional[str] = None) -> np.ndarray:
         """
-        Preprocess input data using loaded preprocessor.
+        Preprocess data for prediction.
         
         Parameters:
         -----------
         data : pd.DataFrame
             Input data
-        target_column : Optional[str]
-            Name of target column (if present)
+        target_column : str, optional
+            Target column name (if present)
             
         Returns:
         --------
         np.ndarray
-            Preprocessed features
+            Preprocessed data
         """
-        if self.preprocessor is None:
-            raise ValueError("Preprocessor not loaded. Call load_preprocessor() first.")
-        
-        # Copy data to avoid modifying original
-        data_copy = data.copy()
-        
-        logger.info(f"Preprocessing data with shape {data.shape}")
-        
-        # Extract target if present
-        y = None
-        if target_column and target_column in data_copy.columns:
-            y = data_copy[target_column].values
+        try:
+            # Copy data to avoid modifying the original
+            data_copy = data.copy()
             
-        # Clean data
-        cleaned_data = self.preprocessor.clean_data(data_copy, target_column)
-        
-        # Encode categorical features
-        encoded_data = self.preprocessor.encode_categorical(cleaned_data, target_column)
-        
-        # Scale features
-        if target_column and target_column in encoded_data.columns:
-            X_scaled, _ = self.preprocessor.scale_features(encoded_data, target_column)
-        else:
-            X_scaled = self.preprocessor.scaler.transform(encoded_data)
-        
-        logger.info(f"Preprocessing complete. Output shape: {X_scaled.shape}")
-        return X_scaled
-    
-    def engineer_features(self, X: np.ndarray, feature_names: List[str]) -> np.ndarray:
-        """
-        Engineer features using loaded feature engineer.
-        
-        Parameters:
-        -----------
-        X : np.ndarray
-            Input features
-        feature_names : List[str]
-            Names of input features
+            # Step 1: Handle missing values and clean the data
+            if target_column and target_column in data_copy.columns:
+                cleaned_data = self.preprocessor.clean_data(data_copy, target_column)
+                # Step 2: Encode categorical features
+                encoded_data = self.preprocessor.encode_categorical(cleaned_data, target_column)
+                # Step 3: Scale features
+                X_scaled, _ = self.preprocessor.scale_features(encoded_data, target_column)
+                feature_names = encoded_data.drop(columns=[target_column]).columns.tolist()
+            else:
+                # If no target column, we need to manually apply similar preprocessing
+                # This assumes the preprocessor has the necessary attributes from training
+                
+                # Handle missing values
+                numeric_cols = data_copy.select_dtypes(include=['int64', 'float64']).columns
+                for col in numeric_cols:
+                    data_copy[col] = data_copy[col].fillna(data_copy[col].median())
+                    data_copy[col] = data_copy[col].replace([np.inf, -np.inf], data_copy[col].median())
+                
+                # Encode categorical columns if any
+                cat_cols = data_copy.select_dtypes(include=['object']).columns
+                for col in cat_cols:
+                    if hasattr(self.preprocessor, 'feature_encoders') and col in self.preprocessor.feature_encoders:
+                        # Handle unseen categories
+                        encoder = self.preprocessor.feature_encoders[col]
+                        unseen_cats = set(data_copy[col].unique()) - set(encoder.classes_)
+                        if unseen_cats:
+                            for cat in unseen_cats:
+                                data_copy.loc[data_copy[col] == cat, col] = encoder.classes_[0]
+                        data_copy[col] = encoder.transform(data_copy[col])
+                
+                # Scale numeric features
+                if hasattr(self.preprocessor, 'scaler') and self.preprocessor.scaler is not None:
+                    X_scaled = self.preprocessor.scaler.transform(data_copy)
+                else:
+                    X_scaled = data_copy.values
+                
+                feature_names = data_copy.columns.tolist()
             
-        Returns:
-        --------
-        np.ndarray
-            Engineered features
-        """
-        if self.feature_engineer is None:
-            raise ValueError("Feature engineer not loaded. Call load_feature_engineer() first.")
-        
-        logger.info(f"Engineering features from input with shape {X.shape}")
-        
-        # Engineer new features
-        X_engineered, _ = self.feature_engineer.engineer_features(X, feature_names)
-        
-        # Select features (if applicable)
-        if hasattr(self.feature_engineer, 'feature_selector') and self.feature_engineer.feature_selector is not None:
-            X_selected = self.feature_engineer.feature_selector.transform(X_engineered)
-            logger.info(f"Feature engineering complete. Output shape: {X_selected.shape}")
-            return X_selected
-        
-        # For PCA
-        elif hasattr(self.feature_engineer, 'pca_model') and self.feature_engineer.pca_model is not None:
-            X_selected = self.feature_engineer.pca_model.transform(X_engineered)
-            logger.info(f"Feature engineering complete. Output shape: {X_selected.shape}")
-            return X_selected
-        
-        else:
-            logger.info(f"Feature engineering complete (no selection applied). Output shape: {X_engineered.shape}")
-            return X_engineered
+            # Step 4: Apply feature engineering and selection
+            if self.feature_engineer is not None:
+                # First apply feature engineering
+                X_engineered, engineered_feature_names = self.feature_engineer.engineer_features(
+                    X_scaled, feature_names)
+                
+                # Then apply feature selection to get the final set of features
+                X_selected = self.feature_engineer.transform_feature_selection(X_engineered)  # Assuming 20 features were selected during training
+                
+                return X_selected
+            else:
+                # If no feature engineer is available, return the scaled features
+                # This might cause dimension mismatch with the model
+                logger.warning("No feature engineer available. Using scaled features only.")
+                return X_scaled
+                
+        except Exception as e:
+            logger.error(f"Error preprocessing data: {e}")
+            raise
     
     def predict(self, data: pd.DataFrame, target_column: Optional[str] = None) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Predict anomalies in the input data.
+        Make predictions on new data.
         
         Parameters:
         -----------
         data : pd.DataFrame
             Input data
-        target_column : Optional[str]
-            Name of target column (if present, for metrics calculation)
+        target_column : str, optional
+            Target column name (if present)
             
         Returns:
         --------
         Tuple[np.ndarray, np.ndarray]
-            Predicted class labels and probabilities
+            Predicted labels and probabilities
         """
-        if self.model is None:
-            raise ValueError("Model not loaded. Call load_model() first.")
-        
-        # Preprocess data
-        X_preprocessed = self.preprocess_data(data, target_column)
-        
-        # Get feature names (excluding target column)
-        feature_names = [col for col in data.columns if col != target_column]
-        
-        # Engineer features
-        if self.feature_engineer is not None:
-            try:
-                X_final = self.engineer_features(X_preprocessed, feature_names)
-            except Exception as e:
-                logger.warning(f"Feature engineering failed: {e}. Using preprocessed features.")
-                X_final = X_preprocessed
-        else:
-            X_final = X_preprocessed
-        
-        # Make predictions
-        logger.info(f"Making predictions on data with shape {X_final.shape}")
         try:
-            # Get probabilities if supported
-            if hasattr(self.model, 'predict_proba'):
+            # Preprocess data
+            X_final = self.preprocess_data(data, target_column)
+            
+            logger.info(f"Preprocessed data shape: {X_final.shape}")
+            
+            # Make predictions
+            y_pred = self.model.predict(X_final)
+            
+            # Get probabilities if possible
+            try:
                 y_proba = self.model.predict_proba(X_final)
-                
-                # For binary classification, extract positive class probability
-                if y_proba.shape[1] == 2:
-                    y_proba_positive = y_proba[:, 1]
-                else:
-                    # For multiclass, max probability
-                    y_proba_positive = np.max(y_proba, axis=1)
-                
-                # Predict class based on threshold
-                y_pred = (y_proba_positive >= self.threshold).astype(int)
-                
-                # For multiclass, get actual predicted class
-                if y_proba.shape[1] > 2:
-                    y_pred = np.argmax(y_proba, axis=1)
-                
-                return y_pred, y_proba
-            else:
-                # Use predict method if predict_proba not available
-                y_pred = self.model.predict(X_final)
-                return y_pred, None
+            except Exception as e:
+                logger.warning(f"Could not get prediction probabilities: {e}")
+                y_proba = None
+            
+            return y_pred, y_proba
+            
         except Exception as e:
             logger.error(f"Prediction error: {e}")
             raise
     
-    def evaluate(self, data: pd.DataFrame, target_column: str) -> Dict[str, float]:
+    def evaluate(self, data: pd.DataFrame, target_column: str) -> Dict[str, Any]:
         """
-        Evaluate model on test data.
+        Evaluate model performance on labeled data.
         
         Parameters:
         -----------
         data : pd.DataFrame
             Input data with target column
         target_column : str
-            Name of target column
+            Target column name
             
         Returns:
         --------
-        Dict[str, float]
-            Dictionary of evaluation metrics
+        Dict[str, Any]
+            Evaluation metrics
         """
-        from sklearn.metrics import (
-            accuracy_score, precision_score, recall_score, f1_score, 
-            roc_auc_score, confusion_matrix, classification_report
-        )
-        
-        if target_column not in data.columns:
-            raise ValueError(f"Target column '{target_column}' not found in data")
-        
-        # Get true labels
-        y_true = data[target_column].values
-        
-        # Encode labels if necessary
-        if self.inverse_label_mapping and y_true.dtype == object:
-            y_true_encoded = np.array([self.inverse_label_mapping.get(label, -1) for label in y_true])
-            if -1 in y_true_encoded:
-                logger.warning("Some labels in test data were not seen during training")
-            y_true = y_true_encoded
-        
-        # Make predictions
-        y_pred, y_proba = self.predict(data, target_column)
-        
-        # Calculate metrics
-        metrics = {}
-        
-        metrics['accuracy'] = accuracy_score(y_true, y_pred)
-        
-        # Determine if binary or multiclass
-        n_classes = len(np.unique(y_true))
-        
-        if n_classes == 2:
-            # Binary classification
-            metrics['precision'] = precision_score(y_true, y_pred, zero_division=0)
-            metrics['recall'] = recall_score(y_true, y_pred, zero_division=0)
-            metrics['f1'] = f1_score(y_true, y_pred, zero_division=0)
+        try:
+            # Get true labels
+            y_true = data[target_column].values
             
-            if y_proba is not None:
-                try:
-                    if y_proba.ndim > 1 and y_proba.shape[1] == 2:
-                        metrics['roc_auc'] = roc_auc_score(y_true, y_proba[:, 1])
-                    else:
-                        metrics['roc_auc'] = roc_auc_score(y_true, y_proba)
-                except Exception as e:
-                    logger.warning(f"ROC AUC calculation error: {e}")
-        else:
-            # Multiclass classification
-            metrics['precision_macro'] = precision_score(y_true, y_pred, average='macro', zero_division=0)
-            metrics['recall_macro'] = recall_score(y_true, y_pred, average='macro', zero_division=0)
-            metrics['f1_macro'] = f1_score(y_true, y_pred, average='macro', zero_division=0)
-            metrics['precision_weighted'] = precision_score(y_true, y_pred, average='weighted', zero_division=0)
-            metrics['recall_weighted'] = recall_score(y_true, y_pred, average='weighted', zero_division=0)
-            metrics['f1_weighted'] = f1_score(y_true, y_pred, average='weighted', zero_division=0)
+            # Encode labels if necessary
+            if y_true.dtype == object and self.preprocessor.label_encoder is not None:
+                y_true = self.preprocessor.label_encoder.transform(y_true)
             
-            if y_proba is not None:
-                try:
-                    metrics['roc_auc_macro'] = roc_auc_score(y_true, y_proba, multi_class='ovr', average='macro')
-                except Exception as e:
-                    logger.warning(f"ROC AUC calculation error: {e}")
-        
-        # Calculate confusion matrix
-        cm = confusion_matrix(y_true, y_pred)
-        metrics['confusion_matrix'] = cm.tolist()
-        
-        # Log results
-        logger.info("\n=== Evaluation Results ===")
-        for metric, value in metrics.items():
-            if metric != 'confusion_matrix':
-                logger.info(f"{metric}: {value:.4f}")
-        
-        # Log classification report
-        logger.info("\nClassification Report:")
-        logger.info("\n" + classification_report(y_true, y_pred))
-        
-        return metrics
+            # Make predictions
+            y_pred, y_proba = self.predict(data, target_column)
+            
+            # Calculate metrics
+            metrics = {
+                'accuracy': accuracy_score(y_true, y_pred),
+                'precision': precision_score(y_true, y_pred, average='weighted'),
+                'recall': recall_score(y_true, y_pred, average='weighted'),
+                'f1_score': f1_score(y_true, y_pred, average='weighted'),
+                'confusion_matrix': confusion_matrix(y_true, y_pred).tolist(),
+                'classification_report': classification_report(y_true, y_pred, output_dict=True)
+            }
+            
+            # Log metrics
+            logger.info(f"Evaluation metrics:")
+            logger.info(f"Accuracy: {metrics['accuracy']:.4f}")
+            logger.info(f"Precision: {metrics['precision']:.4f}")
+            logger.info(f"Recall: {metrics['recall']:.4f}")
+            logger.info(f"F1 Score: {metrics['f1_score']:.4f}")
+            
+            return metrics
+            
+        except Exception as e:
+            logger.error(f"Evaluation error: {e}")
+            raise
     
-    def predict_batch(self, data_path: str, output_path: str, 
-                    target_column: Optional[str] = None, batch_size: int = 10000) -> None:
+    def predict_batch(self, input_file: str, output_file: str, 
+                     target_column: Optional[str] = None,
+                     batch_size: int = 10000) -> None:
         """
-        Make predictions on a large dataset in batches.
+        Process a large file in batches.
         
         Parameters:
         -----------
-        data_path : str
-            Path to input data file (CSV)
-        output_path : str
-            Path to save predictions
-        target_column : Optional[str]
-            Name of target column (if present)
+        input_file : str
+            Path to input CSV file
+        output_file : str
+            Path to output CSV file
+        target_column : str, optional
+            Target column name (if present)
         batch_size : int
             Batch size for processing
         """
-        if not os.path.exists(data_path):
-            raise FileNotFoundError(f"Input file not found: {data_path}")
-        
-        logger.info(f"Processing {data_path} in batches of {batch_size}")
-        
-        # Create output directory if it doesn't exist
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        
-        # Process in batches
-        for i, chunk in enumerate(pd.read_csv(data_path, chunksize=batch_size)):
-            logger.info(f"Processing batch {i+1}")
+        try:
+            # Get total rows for progress reporting
+            total_rows = sum(1 for _ in open(input_file)) - 1  # Subtract header row
+            logger.info(f"Processing {total_rows} rows in batches of {batch_size}")
             
-            # Make predictions
-            y_pred, y_proba = self.predict(chunk, target_column)
+            # Process in batches
+            chunk_iter = pd.read_csv(input_file, chunksize=batch_size)
             
-            # Create result dataframe
-            result = chunk.copy()
+            # Process first chunk to get column structure for output
+            first_chunk = next(chunk_iter)
+            y_pred, y_proba = self.predict(first_chunk, target_column)
+            
+            # Create result DataFrame for first chunk
+            result = first_chunk.copy()
             result['predicted_class'] = y_pred
             
             # Add class names if available
@@ -427,141 +354,125 @@ class AnomalyDetector:
                     # Binary case
                     result['probability'] = y_proba
             
-            # Save batch results
-            mode = 'w' if i == 0 else 'a'
-            header = i == 0
-            result.to_csv(output_path, mode=mode, header=header, index=False)
+            # Write first chunk with header
+            result.to_csv(output_file, index=False, mode='w')
             
-            logger.info(f"Saved batch {i+1} predictions")
-        
-        logger.info(f"Predictions saved to {output_path}")
+            # Process remaining chunks
+            processed_rows = len(first_chunk)
+            logger.info(f"Processed {processed_rows}/{total_rows} rows ({processed_rows/total_rows:.1%})")
+            
+            for i, chunk in enumerate(chunk_iter, 1):
+                y_pred, y_proba = self.predict(chunk, target_column)
+                
+                # Create result DataFrame
+                result = chunk.copy()
+                result['predicted_class'] = y_pred
+                
+                # Add class names if available
+                if self.label_mapping:
+                    result['predicted_label'] = [self._get_class_name(pred) for pred in y_pred]
+                
+                # Add probabilities if available
+                if y_proba is not None:
+                    if y_proba.ndim > 1:
+                        # Multi-class case
+                        for j in range(y_proba.shape[1]):
+                            result[f'probability_class_{j}'] = y_proba[:, j]
+                            if self.label_mapping:
+                                class_name = self._get_class_name(j)
+                                result[f'probability_{class_name}'] = y_proba[:, j]
+                    else:
+                        # Binary case
+                        result['probability'] = y_proba
+                
+                # Append to output file without header
+                result.to_csv(output_file, index=False, mode='a', header=False)
+                
+                # Update progress
+                processed_rows += len(chunk)
+                logger.info(f"Processed {processed_rows}/{total_rows} rows ({processed_rows/total_rows:.1%})")
+            
+            logger.info(f"Batch processing complete. Results saved to {output_file}")
+            
+        except Exception as e:
+            logger.error(f"Batch processing error: {e}")
+            raise
     
-    def explain_prediction(self, data: pd.DataFrame, row_index: int,
-                         target_column: Optional[str] = None) -> Dict[str, Any]:
+    def explain_prediction(self, data: pd.DataFrame, row_idx: int,
+                          target_column: Optional[str] = None) -> Dict[str, Any]:
         """
-        Explain a specific prediction using feature importance.
+        Generate an explanation for a specific prediction.
         
         Parameters:
         -----------
         data : pd.DataFrame
             Input data
-        row_index : int
+        row_idx : int
             Index of the row to explain
-        target_column : Optional[str]
-            Name of target column (if present)
+        target_column : str, optional
+            Target column name (if present)
             
         Returns:
         --------
         Dict[str, Any]
-            Explanation data
+            Explanation details
         """
         try:
-            import shap
-        except ImportError:
-            logger.error("SHAP library not installed. Install with 'pip install shap'")
-            return {"error": "SHAP library not installed"}
-        
-        if row_index >= len(data):
-            raise ValueError(f"Row index {row_index} out of bounds for data with {len(data)} rows")
-        
-        # Get single row
-        single_row = data.iloc[[row_index]]
-        
-        # Preprocess
-        X_preprocessed = self.preprocess_data(single_row, target_column)
-        
-        # Get feature names (excluding target column)
-        feature_names = [col for col in data.columns if col != target_column]
-        
-        # Engineer features
-        if self.feature_engineer is not None:
-            try:
-                X_final = self.engineer_features(X_preprocessed, feature_names)
-                
-                # Update feature names if using feature engineer
-                if hasattr(self.feature_engineer, 'selected_features') and self.feature_engineer.selected_features is not None:
-                    feature_names = self.feature_engineer.selected_features
-                elif hasattr(self.feature_engineer, 'pca_model') and self.feature_engineer.pca_model is not None:
-                    feature_names = [f"PC{i+1}" for i in range(X_final.shape[1])]
-            except Exception as e:
-                logger.warning(f"Feature engineering failed: {e}. Using preprocessed features.")
-                X_final = X_preprocessed
-        else:
-            X_final = X_preprocessed
-        
-        # Get prediction
-        if hasattr(self.model, 'predict_proba'):
-            prediction = self.model.predict_proba(X_final)[0]
-            predicted_class = np.argmax(prediction)
-            confidence = prediction[predicted_class]
-        else:
-            predicted_class = self.model.predict(X_final)[0]
-            confidence = None
-        
-        # Convert class to label if mapping exists
-        predicted_label = self._get_class_name(predicted_class)
-        
-        # Create explanation based on model type
-        explanation = {
-            'row_index': row_index,
-            'predicted_class': int(predicted_class),
-            'predicted_label': predicted_label,
-            'confidence': float(confidence) if confidence is not None else None,
-            'feature_importance': {},
-            'feature_values': {}
-        }
-        
-        # Get original feature values
-        for feature in data.columns:
-            if feature != target_column:
-                value = single_row[feature].values[0]
-                explanation['feature_values'][feature] = value
-        
-        # Get feature importance based on model type
-        if hasattr(self.model, 'feature_importances_'):
-            # Tree-based models
-            importances = self.model.feature_importances_
-            for i, importance in enumerate(importances):
-                if i < len(feature_names):
-                    explanation['feature_importance'][feature_names[i]] = float(importance)
+            # Get the row to explain
+            row_data = data.iloc[[row_idx]].copy()
             
-        elif isinstance(self.model, (LogisticRegression)):
-            # Linear models
-            coefs = self.model.coef_
-            if coefs.shape[0] == 1:  # Binary case
-                for i, coef in enumerate(coefs[0]):
-                    if i < len(feature_names):
-                        explanation['feature_importance'][feature_names[i]] = float(abs(coef))
-            else:  # Multiclass case
-                for i, coef in enumerate(coefs[predicted_class]):
-                    if i < len(feature_names):
-                        explanation['feature_importance'][feature_names[i]] = float(abs(coef))
-        
-        else:
-            # Use SHAP for other models
-            try:
-                # Create explainer
-                if hasattr(self.model, 'predict_proba'):
-                    explainer = shap.Explainer(self.model.predict_proba, X_final)
+            # Get prediction
+            y_pred, y_proba = self.predict(row_data, target_column)
+            
+            # Get predicted class and name
+            pred_class = int(y_pred[0])
+            pred_class_name = self._get_class_name(pred_class)
+            
+            # Base explanation with key data and prediction
+            explanation = {
+                'row_idx': int(row_idx),
+                'prediction': {
+                    'class': int(pred_class),
+                    'class_name': pred_class_name,
+                    'confidence': float(y_proba[0, pred_class]) if y_proba is not None and y_proba.ndim > 1 else None
+                },
+                'input_data': row_data.to_dict('records')[0],
+            }
+            
+            # Add true label if available
+            if target_column and target_column in row_data.columns:
+                true_label = row_data[target_column].iloc[0]
+                true_class = self.inverse_label_mapping.get(true_label, -1) if self.inverse_label_mapping else -1
+                explanation['true_label'] = {
+                    'class': int(true_class) if true_class != -1 else None,
+                    'class_name': str(true_label)
+                }
+            
+            # Try to add feature importance if the model supports it
+            if hasattr(self.model, 'feature_importances_'):
+                # Preprocess the data to get the features used by the model
+                X_final = self.preprocess_data(row_data, target_column)
+                
+                # Get feature names if available
+                if hasattr(self.feature_engineer, 'selected_features_') and self.feature_engineer.selected_features_ is not None:
+                    feature_names = self.feature_engineer.selected_features_
                 else:
-                    explainer = shap.Explainer(self.model.predict, X_final)
+                    feature_names = [f"feature_{i}" for i in range(X_final.shape[1])]
                 
-                # Get SHAP values
-                shap_values = explainer(X_final)
-                
-                # Extract values for the predicted class
-                if len(shap_values.shape) > 2:  # Multiclass case
-                    shap_for_class = shap_values[0, :, predicted_class]
-                else:  # Binary case
-                    shap_for_class = shap_values[0, :]
+                # Get feature importances
+                importances = self.model.feature_importances_
                 
                 # Add to explanation
-                for i, value in enumerate(shap_for_class):
-                    if i < len(feature_names):
-                        explanation['feature_importance'][feature_names[i]] = float(abs(value))
+                explanation['feature_importances'] = [
+                    {'name': name, 'importance': float(imp)} 
+                    for name, imp in zip(feature_names, importances)
+                ]
+                
+                # Sort by importance
+                explanation['feature_importances'].sort(key=lambda x: x['importance'], reverse=True)
             
-            except Exception as e:
-                logger.warning(f"SHAP explanation failed: {e}")
-                explanation['error'] = f"SHAP explanation failed: {str(e)}"
-        
-        return explanation
+            return explanation
+            
+        except Exception as e:
+            logger.error(f"Error explaining prediction: {e}")
+            raise

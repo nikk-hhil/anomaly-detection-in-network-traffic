@@ -20,6 +20,9 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.ensemble import VotingClassifier
 from sklearn.base import BaseEstimator
 import warnings
+import threading
+import _thread
+import platform
 
 # Get logger
 logger = logging.getLogger(__name__)
@@ -33,23 +36,43 @@ def time_limit(seconds):
     """
     Context manager to limit the execution time of a function.
     Raises TimeoutException if the execution time exceeds the specified limit.
+    Works on both Windows and Unix/Linux systems.
     """
-    def signal_handler(signum, frame):
-        raise TimeoutException(f"Execution timed out after {seconds} seconds")
-    
-    # Store the previous handler
-    previous_handler = signal.getsignal(signal.SIGALRM)
-    
-    # Set the new handler
-    signal.signal(signal.SIGALRM, signal_handler)
-    signal.alarm(seconds)
-    
-    try:
-        yield
-    finally:
-        # Disable the alarm and restore the previous handler
-        signal.alarm(0)
-        signal.signal(signal.SIGALRM, previous_handler)
+    if platform.system() != 'Windows':  # Unix/Linux/Mac
+        # Use signal-based approach
+        def signal_handler(signum, frame):
+            raise TimeoutException(f"Execution timed out after {seconds} seconds")
+        
+        # Store the previous handler
+        previous_handler = signal.getsignal(signal.SIGALRM)
+        
+        # Set the new handler
+        signal.signal(signal.SIGALRM, signal_handler)
+        signal.alarm(seconds)
+        
+        try:
+            yield
+        finally:
+            # Disable the alarm and restore the previous handler
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, previous_handler)
+    else:  # Windows
+        timer = None
+        def timeout_handler():
+            _thread.interrupt_main()
+        
+        timer = threading.Timer(seconds, timeout_handler)
+        timer.daemon = True
+        timer.start()
+        
+        try:
+            yield
+        except KeyboardInterrupt:
+            # Convert KeyboardInterrupt to TimeoutException
+            raise TimeoutException(f"Execution timed out after {seconds} seconds")
+        finally:
+            if timer:
+                timer.cancel()
 
 class MemoryMonitor:
     """Monitor memory usage during model training."""
@@ -115,21 +138,22 @@ class ModelTrainer:
     
     def _sample_dataset(self, X: np.ndarray, y: np.ndarray, ratio: float = None) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Subsample the dataset to reduce computational requirements.
+        Subsample the dataset to reduce computational requirements while preserving
+        class distribution and ensuring minimum samples per class.
     
         Parameters:
         -----------
         X : np.ndarray
-            Feature matrix
+        Feature matrix
         y : np.ndarray
-            Target vector
+        Target vector
         ratio : float, optional
-            Sampling ratio (if None, use self.sampling_ratio)
+        Sampling ratio (if None, use self.sampling_ratio)
         
         Returns:
         --------
         Tuple[np.ndarray, np.ndarray]
-            Sampled X and y
+        Sampled X and y
         """
         if ratio is None:
             ratio = self.sampling_ratio
@@ -137,19 +161,64 @@ class ModelTrainer:
         if ratio < 1.0:
             logger.info(f"Sampling dataset with ratio {ratio}")
         
-        # Stratified sampling to preserve class distribution
-            X_sampled, _, y_sampled, _ = train_test_split(
-                X, y, 
-                train_size=ratio, 
-                stratify=y,
-                random_state=42
-            )
+        # Get unique classes and their counts
+            classes, counts = np.unique(y, return_counts=True)
+            min_samples_per_class = 5  # Ensure at least 5 samples per class
         
-            logger.info(f"Sampled dataset size: {X_sampled.shape[0]} samples (was {X.shape[0]})")
-            return X_sampled, y_sampled  # This return statement was missing
+        # For classes with few samples, keep all samples
+            rare_class_indices = []
+            common_class_indices = []
+        
+        # Separate indices for rare and common classes
+            for cls in classes:
+                cls_indices = np.where(y == cls)[0]
+                cls_count = len(cls_indices)
+            
+                if cls_count < min_samples_per_class / ratio:
+                    # Keep all samples for very rare classes
+                    rare_class_indices.extend(cls_indices)
+                else:
+                    common_class_indices.extend(cls_indices)
+        
+        # Convert to numpy arrays
+            rare_class_indices = np.array(rare_class_indices)
+            common_class_indices = np.array(common_class_indices)
+        
+        # Sample from common classes
+            if len(common_class_indices) > 0:
+                # Calculate how many samples to take from common classes
+                n_samples_common = int(len(common_class_indices) * ratio)
+                sampled_common_indices = np.random.choice(
+                    common_class_indices, 
+                    size=n_samples_common, 
+                    replace=False
+                )
+            
+            # Combine rare class samples with sampled common class samples
+                all_sampled_indices = np.concatenate([rare_class_indices, sampled_common_indices])
+            
+            # Shuffle the indices
+                np.random.shuffle(all_sampled_indices)
+            
+            # Extract the samples
+                X_sampled = X[all_sampled_indices]
+                y_sampled = y[all_sampled_indices]
+            else:
+            # If there are no common classes, just use the rare class samples
+                X_sampled = X[rare_class_indices]
+                y_sampled = y[rare_class_indices]
+        
+        # Log the class distribution in the sampled dataset
+            sampled_classes, sampled_counts = np.unique(y_sampled, return_counts=True)
+            logger.info(f"Sampled dataset size: {len(y_sampled)} samples (was {len(y)})")
+            logger.info("Class distribution in sampled dataset:")
+            for cls, count in zip(sampled_classes, sampled_counts):
+                logger.info(f"  Class {cls}: {count} samples")
+
+            return X_sampled, y_sampled
     
-        # If no sampling is needed, return the original dataset
-        return X, y  # This return statement was also missing
+    # If no sampling is needed, return the original dataset
+        return X, y
     
     def _get_model_params(self, model_name: str, use_reduced_grid: bool = False) -> Dict:
         """
@@ -410,150 +479,193 @@ class ModelTrainer:
             Dictionary of trained models
         """
         if models_to_train is None:
+        # Start with just two simpler models for initial success
             models_to_train = ['logistic_regression', 'decision_tree']
-        
-        # Define model constructors
+    
+    # Define model constructors
         model_constructors = {
             'random_forest': RandomForestClassifier(random_state=42),
             'gradient_boosting': GradientBoostingClassifier(random_state=42),
-            'logistic_regression': LogisticRegression(random_state=42),
+            'logistic_regression': LogisticRegression(random_state=42, max_iter=500),  # Increased max_iter
             'svm': SVC(probability=True, random_state=42),
             'decision_tree': DecisionTreeClassifier(random_state=42),
             'knn': KNeighborsClassifier(),
             'mlp': MLPClassifier(random_state=42),
             'adaboost': AdaBoostClassifier(random_state=42)
         }
-        
+    
         logger.info(f"\n=== Training Models ===")
         
         # For imbalanced datasets, adjust the scoring metric
         if len(np.unique(y_train)) > 2:
-            # For multiclass, use weighted metrics
+        # For multiclass, use weighted metrics
             if scoring == 'f1':
                 scoring = 'f1_weighted'
             elif scoring == 'precision':
                 scoring = 'precision_weighted'
             elif scoring == 'recall':
                 scoring = 'recall_weighted'
-            
+        
             logger.info(f"Using '{scoring}' scoring for multiclass classification")
         else:
-            # For binary classification with imbalanced classes
+        # For binary classification with imbalanced classes
             class_counts = np.bincount(y_train)
             imbalance_ratio = max(class_counts) / min(class_counts)
-            
+        
             if imbalance_ratio > 10:
                 # For highly imbalanced datasets, consider using different metrics
                 logger.info(f"Dataset is highly imbalanced (ratio: {imbalance_ratio:.2f}). Using '{scoring}' scoring.")
-        
-        # Check initial memory usage
+    
+    # Check initial memory usage
         memory_usage, is_critical = self.memory_monitor.check_memory()
         logger.info(f"Initial memory usage: {memory_usage:.1f}%")
-        
-        # Apply dataset sampling if ratio < 1.0
+    
+    # Apply dataset sampling if ratio < 1.0
         if self.sampling_ratio < 1.0:
             X_train_sampled, y_train_sampled = self._sample_dataset(X_train, y_train)
         else:
             X_train_sampled, y_train_sampled = X_train, y_train
         
         # If memory is critical before starting, reduce sample size further
+        # If memory is critical before starting, reduce sample size further
         if is_critical and self.sampling_ratio > 0.3:
             logger.warning("Memory usage critical before training. Reducing sample size further.")
             X_train_sampled, y_train_sampled = self._sample_dataset(X_train, y_train, ratio=0.3)
-        
-        # Train selected models
+    
+    # Train selected models with simplified approach for initial success
         for model_name in models_to_train:
-            # Handle ensemble case separately
+            # Skip ensemble initially to get basic models working first
             if model_name.lower() == 'ensemble':
-                try:
-                    with time_limit(self.training_timeout):
-                        self._train_ensemble(X_train_sampled, y_train_sampled, cv=cv, scoring=scoring, n_jobs=n_jobs)
-                except TimeoutException:
-                    logger.error(f"Ensemble training timed out after {self.training_timeout} seconds")
-                    continue
-                except Exception as e:
-                    logger.error(f"Error during ensemble training: {e}")
+                logger.info("Skipping ensemble model for initial run")
                 continue
                 
             if model_name not in model_constructors:
                 logger.warning(f"Unknown model '{model_name}'. Skipping.")
                 continue
-            
+        
             logger.info(f"\nTraining {model_name}...")
             start_time = time.time()
-            
-            base_model = model_constructors[model_name]
-            
-            # Train with hyperparameter tuning (with timeout and fallbacks)
-            if tune_hyperparams:
-                model = self._train_with_tuning(
-                    model_name, base_model, X_train_sampled, y_train_sampled, 
-                    cv, scoring, n_jobs
-                )
-            else:
-                # Train with default parameters (with timeout and fallbacks)
-                model = self._train_with_default_params(
-                    model_name, base_model, X_train_sampled, y_train_sampled
-                )
-            
-            # If model is still None after all attempts, skip this model
-            if model is None:
-                logger.error(f"Could not train {model_name} with any configuration. Skipping.")
-                continue
-            
-            training_time = time.time() - start_time
-            self.training_time[model_name] = training_time
-            logger.info(f"Training completed in {training_time:.2f} seconds")
-            
-            # Save the model
-            self.models[model_name] = model
-            
-            # Force garbage collection after each model
-            gc.collect()
         
-        if self.best_model is None and self.models:
-            # If we didn't perform hyperparameter tuning, evaluate models on training data
-            best_score = 0
-            for model_name, model in self.models.items():
-                try:
-                    # Use reduced dataset for evaluation if original was large
-                    eval_X = X_train_sampled
-                    eval_y = y_train_sampled
-                    
-                    y_pred = model.predict(eval_X)
-                    if len(np.unique(eval_y)) > 2:  # multiclass
-                        score = f1_score(eval_y, y_pred, average='weighted')
+            base_model = model_constructors[model_name]
+        
+        # Simplified training approach - try with default parameters first
+            try:
+                logger.info(f"Training {model_name} with default parameters...")
+                model = base_model
+            
+            # For logistic regression with multiclass, ensure we use appropriate solver
+                if model_name == 'logistic_regression' and len(np.unique(y_train_sampled)) > 2:
+                    model = LogisticRegression(random_state=42, max_iter=500, 
+                                          multi_class='multinomial', 
+                                          solver='lbfgs', 
+                                          class_weight='balanced')
+            
+            # Add class weights for decision tree to handle imbalance
+                if model_name == 'decision_tree':
+                    model = DecisionTreeClassifier(random_state=42, class_weight='balanced')
+            
+            # Simple fit with timeout - use the cross-platform time_limit
+                with time_limit(self.training_timeout):
+                    model.fit(X_train_sampled, y_train_sampled)
+            
+                    self.models[model_name] = model
+                    training_time = time.time() - start_time
+                    self.training_time[model_name] = training_time
+                    logger.info(f"Training completed in {training_time:.2f} seconds")
+            
+            # Evaluate on training data
+                    y_pred = model.predict(X_train_sampled)
+                    if len(np.unique(y_train_sampled)) > 2:  # multiclass
+                        score = f1_score(y_train_sampled, y_pred, average='weighted')
                     else:  # binary
-                        score = f1_score(eval_y, y_pred)
-                        
-                    if score > best_score:
-                        best_score = score
+                        score = f1_score(y_train_sampled, y_pred)
+            
+                    logger.info(f"{model_name} training {scoring}: {score:.4f}")
+            
+            # Update best model if better
+                    if score > self.best_score:
+                        self.best_score = score
                         self.best_model = model
                         self.best_model_name = model_name
+                
+            except Exception as e:
+                logger.error(f"Error during training {model_name}: {str(e)}")
+            # Try with a more minimal approach
+                try:
+                    logger.info(f"Trying minimal configuration for {model_name}")
+                
+                # Create a very simple model with minimal parameters
+                    if model_name == 'logistic_regression':
+                        model = LogisticRegression(C=1.0, solver='liblinear', max_iter=200)
+                    elif model_name == 'decision_tree':
+                        model = DecisionTreeClassifier(max_depth=5)
+                    else:
+                    # For other models, use constructor with minimal params
+                        model = model_constructors[model_name]
+                
+                    # Reduce dataset size further if needed
+                    X_minimal, y_minimal = self._sample_dataset(X_train_sampled, y_train_sampled, ratio=0.5)
+                
+                # Train with timeout
+                    with time_limit(self.training_timeout // 2):  # Half the original timeout
+                        model.fit(X_minimal, y_minimal)
+                
+                    self.models[model_name] = model
+                    training_time = time.time() - start_time
+                    self.training_time[model_name] = training_time
+                    logger.info(f"Training with minimal config completed in {training_time:.2f} seconds")
+                
+                # Evaluate on training data
+                    y_pred = model.predict(X_minimal)
+                    if len(np.unique(y_minimal)) > 2:  # multiclass
+                        score = f1_score(y_minimal, y_pred, average='weighted')
+                    else:  # binary
+                        score = f1_score(y_minimal, y_pred)
+                
+                    logger.info(f"{model_name} minimal training {scoring}: {score:.4f}")
+                
+                # Update best model if better
+                    if score > self.best_score:
                         self.best_score = score
+                        self.best_model = model
+                        self.best_model_name = model_name
+                    
                 except Exception as e:
-                    logger.error(f"Error evaluating {model_name} on training data: {e}")
-            
-        logger.info(f"\nBest model: {self.best_model_name} (Score: {self.best_score:.4f})")
+                    logger.error(f"Minimal configuration training for {model_name} failed: {str(e)}")
         
+        # Force garbage collection after each model
+            gc.collect()
+    
+        if not self.models:
+            logger.warning("No models were successfully trained.")
+        else:
+            logger.info(f"\nBest model: {self.best_model_name} (Score: {self.best_score:.4f})")
+    
         return self.models
+
+
     def save_models(self, models_dir: str) -> None:
         """
-    Save trained models to disk.
+        Save trained models to disk.
     
-    Parameters:
-    -----------
-    models_dir : str
+        Parameters:
+        -----------
+        models_dir : str
         Directory to save the models
         """
         logger.info(f"\n=== Saving Models ===")
     
-        # Create directory if it doesn't exist
+    # Create directory if it doesn't exist
         if not os.path.exists(models_dir):
             os.makedirs(models_dir)
             logger.info(f"Created directory: {models_dir}")
     
-        # Save each model
+    # Check if we have any models to save
+        if not self.models:
+            logger.warning("No models available to save.")
+            return
+    
+    # Save each model
         for model_name, model in self.models.items():
             try:
                 model_path = os.path.join(models_dir, f"{model_name}.joblib")
@@ -562,13 +674,13 @@ class ModelTrainer:
             except Exception as e:
                 logger.error(f"Error saving {model_name}: {e}")
     
-        # Save the best model separately
+    # Save the best model separately
         if self.best_model is not None and self.best_model_name is not None:
             try:
                 best_model_path = os.path.join(models_dir, "best_model.joblib")
                 joblib.dump(self.best_model, best_model_path)
             
-                # Save metadata about the best model
+            # Save metadata about the best model
                 metadata = {
                     'name': self.best_model_name,
                     'score': self.best_score,

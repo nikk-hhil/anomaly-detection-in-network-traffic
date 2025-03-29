@@ -186,3 +186,83 @@ class DataPreprocessor:
         print(f"Scaled {X.shape[1]} features")
         
         return X_scaled, y_encoded
+    
+    def transform_features(self, data: pd.DataFrame) -> np.ndarray:
+        """
+    Transform features of new data using the fitted preprocessor.
+    
+    Parameters:
+    -----------
+    data : pd.DataFrame
+        New data to transform
+        
+    Returns:
+    --------
+    np.ndarray
+        Transformed features
+    """
+    # Create a copy to avoid modifying the original dataframe
+        transformed_data = data.copy()
+    
+    # 1. Clean the data (handle missing values and infinity values)
+    # For numeric columns, fill with median
+        numeric_columns = transformed_data.select_dtypes(include=['float64', 'int64']).columns
+        for col in numeric_columns:
+            if transformed_data[col].isnull().sum() > 0:
+                transformed_data[col] = transformed_data[col].fillna(transformed_data[col].median())
+    
+    # For categorical columns, fill with mode
+        categorical_columns = transformed_data.select_dtypes(include=['object']).columns
+        for col in categorical_columns:
+            if transformed_data[col].isnull().sum() > 0:
+                transformed_data[col] = transformed_data[col].fillna(transformed_data[col].mode()[0])
+    
+    # Handle infinity values
+        transformed_data = transformed_data.replace([float('inf'), -float('inf')], np.nan)
+        for col in numeric_columns:
+            if transformed_data[col].isna().sum() > 0:
+                transformed_data[col] = transformed_data[col].fillna(transformed_data[col].median())
+    
+    # 2. Apply encoders to categorical features
+        for col, encoder in self.feature_encoders.items():
+            if col in transformed_data.columns:
+                # Handle new categories in test data
+                for category in transformed_data[col].unique():
+                        if category not in encoder.classes_:
+                    # Use the most frequent class for unseen categories
+                            transformed_data.loc[transformed_data[col] == category, col] = encoder.classes_[0]
+            
+                transformed_data[col] = encoder.transform(transformed_data[col])
+    
+    # 3. Scale the features
+        if self.scaler is not None:
+            transformed_features = self.scaler.transform(transformed_data)
+        else:
+            transformed_features = transformed_data.values
+    
+        return transformed_features
+
+def transform_target(self, target_values: pd.Series) -> np.ndarray:
+    """
+    Transform target values using the fitted encoder.
+    
+    Parameters:
+    -----------
+    target_values : pd.Series
+        Target values to transform
+        
+    Returns:
+    --------
+    np.ndarray
+        Transformed target values
+    """
+    if self.label_encoder is not None:
+        # Handle unseen classes
+        for category in target_values.unique():
+            if category not in self.label_encoder.classes_:
+                # Use the most frequent class for unseen categories
+                target_values = target_values.replace(category, self.label_encoder.classes_[0])
+        
+        return self.label_encoder.transform(target_values)
+    else:
+        return target_values.values

@@ -1,0 +1,230 @@
+2025-03-29 15:06:05,473 - src.anomaly_detector - INFO - Loaded model from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\best_model.joblib
+2025-03-29 15:06:05,477 - src.anomaly_detector - INFO - Loaded preprocessor from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\preprocessor.joblib
+2025-03-29 15:06:05,495 - src.anomaly_detector - INFO - Loaded feature engineer from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\feature_engineer.joblib
+2025-03-29 15:06:05,495 - __main__ - ERROR - Input file not found: C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\data\test_data.csv
+2025-03-29 15:07:57,065 - src.anomaly_detector - INFO - Loaded model from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\best_model.joblib
+2025-03-29 15:07:57,067 - src.anomaly_detector - INFO - Loaded preprocessor from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\preprocessor.joblib
+2025-03-29 15:07:57,076 - src.anomaly_detector - INFO - Loaded feature engineer from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\feature_engineer.joblib
+2025-03-29 15:07:57,076 - __main__ - ERROR - Input file not found: C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\data\test_data.csv
+2025-03-29 15:12:54,167 - src.anomaly_detector - INFO - Loaded model from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\best_model.joblib
+2025-03-29 15:12:54,170 - src.anomaly_detector - INFO - Loaded preprocessor from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\preprocessor.joblib
+2025-03-29 15:12:54,179 - src.anomaly_detector - INFO - Loaded feature engineer from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\feature_engineer.joblib
+2025-03-29 15:12:54,180 - __main__ - INFO - Processing file: C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\data\test_data.csv
+2025-03-29 15:12:54,180 - __main__ - INFO - Using model: C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\best_model.joblib
+2025-03-29 15:12:54,180 - __main__ - INFO - Detection threshold: 0.5
+2025-03-29 15:12:54,181 - __main__ - INFO - Target column provided:  Label
+2025-03-29 15:12:54,185 - __main__ - INFO - Processing data and making predictions...
+2025-03-29 15:12:54,191 - __main__ - INFO - Loaded data with shape: (1000, 79)
+2025-03-29 15:12:54,191 - src.anomaly_detector - INFO - Preprocessing data with shape (1000, 79)
+2025-03-29 15:12:54,215 - src.anomaly_detector - INFO - Preprocessing complete. Output shape: (1000, 78)
+2025-03-29 15:12:54,216 - src.anomaly_detector - INFO - Engineering features from input with shape (1000, 78)
+2025-03-29 15:12:54,216 - src.feature_engineering - INFO - 
+=== Engineering New Features ===
+2025-03-29 15:12:54,217 - src.feature_engineering - INFO - Created rate feature:  Total Fwd Packets_Rate
+2025-03-29 15:12:54,218 - src.feature_engineering - INFO - Created rate feature:  Total Backward Packets_Rate
+2025-03-29 15:12:54,218 - src.feature_engineering - INFO - Created rate feature: Total Length of Fwd Packets_Rate
+2025-03-29 15:12:54,218 - src.feature_engineering - INFO - Created rate feature:  Total Length of Bwd Packets_Rate
+2025-03-29 15:12:54,219 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Max_Rate
+2025-03-29 15:12:54,219 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Min_Rate
+2025-03-29 15:12:54,219 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Mean_Rate
+2025-03-29 15:12:54,220 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Std_Rate
+2025-03-29 15:12:54,220 - src.feature_engineering - INFO - Created rate feature: Bwd Packet Length Max_Rate
+2025-03-29 15:12:54,220 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Min_Rate
+2025-03-29 15:12:54,221 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Mean_Rate
+2025-03-29 15:12:54,221 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Std_Rate
+2025-03-29 15:12:54,221 - src.feature_engineering - INFO - Created rate feature:  Flow Packets/s_Rate
+2025-03-29 15:12:54,222 - src.feature_engineering - INFO - Created rate feature: Fwd Packets/s_Rate
+2025-03-29 15:12:54,222 - src.feature_engineering - INFO - Created rate feature:  Bwd Packets/s_Rate
+2025-03-29 15:12:54,223 - src.feature_engineering - INFO - Created rate feature:  Min Packet Length_Rate
+2025-03-29 15:12:54,223 - src.feature_engineering - INFO - Created rate feature:  Max Packet Length_Rate
+2025-03-29 15:12:54,223 - src.feature_engineering - INFO - Created rate feature:  Packet Length Mean_Rate
+2025-03-29 15:12:54,224 - src.feature_engineering - INFO - Created rate feature:  Packet Length Std_Rate
+2025-03-29 15:12:54,224 - src.feature_engineering - INFO - Created rate feature:  Packet Length Variance_Rate
+2025-03-29 15:12:54,224 - src.feature_engineering - INFO - Created rate feature:  Average Packet Size_Rate
+2025-03-29 15:12:54,225 - src.feature_engineering - INFO - Created rate feature:  Fwd Avg Packets/Bulk_Rate
+2025-03-29 15:12:54,225 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Packets/Bulk_Rate
+2025-03-29 15:12:54,225 - src.feature_engineering - INFO - Created rate feature: Subflow Fwd Packets_Rate
+2025-03-29 15:12:54,226 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Packets_Rate
+2025-03-29 15:12:54,226 - src.feature_engineering - INFO - Created rate feature: Flow Bytes/s_Rate
+2025-03-29 15:12:54,226 - src.feature_engineering - INFO - Created rate feature: Fwd Avg Bytes/Bulk_Rate
+2025-03-29 15:12:54,227 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Bytes/Bulk_Rate
+2025-03-29 15:12:54,227 - src.feature_engineering - INFO - Created rate feature:  Subflow Fwd Bytes_Rate
+2025-03-29 15:12:54,227 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Bytes_Rate
+2025-03-29 15:12:54,229 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Ratio
+2025-03-29 15:12:54,230 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Ratio
+2025-03-29 15:12:54,231 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Ratio
+2025-03-29 15:12:54,232 - src.feature_engineering - INFO - Created ratio feature:  IAT Total_Ratio
+2025-03-29 15:12:54,233 - src.feature_engineering - INFO - Created ratio feature:   IAT Mean_Ratio
+2025-03-29 15:12:54,233 - src.feature_engineering - INFO - Created ratio feature:   IAT Std_Ratio
+2025-03-29 15:12:54,234 - src.feature_engineering - INFO - Created ratio feature:   IAT Max_Ratio
+2025-03-29 15:12:54,234 - src.feature_engineering - INFO - Created ratio feature:   IAT Min_Ratio
+2025-03-29 15:12:54,235 - src.feature_engineering - INFO - Created ratio feature:   URG Flags_Ratio
+2025-03-29 15:12:54,235 - src.feature_engineering - INFO - Created ratio feature:   Header Length_Ratio
+2025-03-29 15:12:54,236 - src.feature_engineering - INFO - Created ratio feature:  Avg  Segment Size_Ratio
+2025-03-29 15:12:54,237 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Ratio
+2025-03-29 15:12:54,238 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Ratio
+2025-03-29 15:12:54,239 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Rate_Ratio
+2025-03-29 15:12:54,239 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Rate_Ratio
+2025-03-29 15:12:54,240 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Rate_Ratio
+2025-03-29 15:12:54,241 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Rate_Ratio
+2025-03-29 15:12:54,242 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Rate_Ratio
+2025-03-29 15:12:54,244 - src.feature_engineering - INFO - Created interaction feature:  Fwd IAT Mean_x_ Avg Fwd Segment Size
+2025-03-29 15:12:54,245 - src.feature_engineering - INFO - Created interaction feature:  Fwd IAT Mean_x_Fwd Packets/s_Rate
+2025-03-29 15:12:54,245 - src.feature_engineering - INFO - Created interaction feature:  Fwd IAT Mean_x_ Fwd Avg Packets/Bulk
+2025-03-29 15:12:54,246 - src.feature_engineering - INFO - Created interaction feature:  Fwd IAT Mean_x_ Fwd Packet Length Min
+2025-03-29 15:12:54,246 - src.feature_engineering - INFO - Created interaction feature:  Avg Fwd Segment Size_x_Fwd Packets/s_Rate
+2025-03-29 15:12:54,247 - src.feature_engineering - INFO - Created interaction feature:  Avg Fwd Segment Size_x_ Fwd Avg Packets/Bulk
+2025-03-29 15:12:54,247 - src.feature_engineering - INFO - Created interaction feature:  Avg Fwd Segment Size_x_ Fwd Packet Length Min
+2025-03-29 15:12:54,247 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Mean_x_ Total Backward Packets_Rate
+2025-03-29 15:12:54,248 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Mean_x_Fwd Packets/s_Rate
+2025-03-29 15:12:54,248 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Mean_x_ Fwd Avg Packets/Bulk
+2025-03-29 15:12:54,248 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Mean_x_ Fwd Packet Length Min
+2025-03-29 15:12:54,249 - src.feature_engineering - INFO - Created interaction feature:  Total Backward Packets_Rate_x_Fwd Packets/s_Rate
+2025-03-29 15:12:54,249 - src.feature_engineering - INFO - Created interaction feature:  Total Backward Packets_Rate_x_ Fwd Avg Packets/Bulk
+2025-03-29 15:12:54,249 - src.feature_engineering - INFO - Created interaction feature:  Total Backward Packets_Rate_x_ Fwd Packet Length Min
+2025-03-29 15:12:54,250 - src.feature_engineering - INFO - Created interaction feature: Fwd Packets/s_Rate_x_ Fwd Avg Packets/Bulk
+2025-03-29 15:12:54,250 - src.feature_engineering - INFO - Created interaction feature: Fwd Packets/s_Rate_x_ Fwd Packet Length Min
+2025-03-29 15:12:54,250 - src.feature_engineering - INFO - Created interaction feature:  Fwd Avg Packets/Bulk_x_ Fwd Packet Length Min
+2025-03-29 15:12:54,251 - src.feature_engineering - INFO - Added 65 new engineered features
+2025-03-29 15:12:54,251 - src.anomaly_detector - WARNING - Feature engineering failed: X has 143 features, but SelectKBest is expecting 145 features as input.. Using preprocessed features.
+2025-03-29 15:12:54,252 - src.anomaly_detector - INFO - Making predictions on data with shape (1000, 78)
+2025-03-29 15:12:54,252 - src.anomaly_detector - ERROR - Prediction error: X has 78 features, but RandomForestClassifier is expecting 20 features as input.
+2025-03-29 15:12:54,252 - __main__ - ERROR - Error during processing: X has 78 features, but RandomForestClassifier is expecting 20 features as input.
+2025-03-29 15:12:54,256 - __main__ - ERROR - Traceback (most recent call last):
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\predict.py", line 276, in main
+    y_pred, y_proba = detector.predict(data, args.target_column)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\anomaly_detector.py", line 263, in predict
+    y_proba = self.model.predict_proba(X_final)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\ensemble\_forest.py", line 946, in predict_proba
+    X = self._validate_X_predict(X)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\ensemble\_forest.py", line 638, in _validate_X_predict
+    X = validate_data(
+        self,
+    ...<4 lines>...
+        ensure_all_finite=ensure_all_finite,
+    )
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\validation.py", line 2965, in validate_data
+    _check_n_features(_estimator, X, reset=reset)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\validation.py", line 2829, in _check_n_features
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: X has 78 features, but RandomForestClassifier is expecting 20 features as input.
+
+2025-03-29 15:15:57,605 - src.anomaly_detector - INFO - Loaded model from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\best_model.joblib
+2025-03-29 15:15:57,607 - src.anomaly_detector - INFO - Loaded preprocessor from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\preprocessor.joblib
+2025-03-29 15:15:57,616 - src.anomaly_detector - INFO - Loaded feature engineer from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\feature_engineer.joblib
+2025-03-29 15:15:57,617 - __main__ - INFO - Processing file: C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\data\test_data.csv
+2025-03-29 15:15:57,617 - __main__ - INFO - Using model: C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\best_model.joblib
+2025-03-29 15:15:57,617 - __main__ - INFO - Detection threshold: 0.5
+2025-03-29 15:15:57,617 - __main__ - INFO - Target column provided:  Label
+2025-03-29 15:15:57,622 - __main__ - INFO - Processing data and making predictions...
+2025-03-29 15:15:57,629 - __main__ - INFO - Loaded data with shape: (1000, 79)
+2025-03-29 15:15:57,629 - __main__ - ERROR - Error during processing: 'DataPreprocessor' object has no attribute 'transform_features'
+2025-03-29 15:15:57,631 - __main__ - ERROR - Traceback (most recent call last):
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\predict.py", line 276, in main
+    y_pred, y_proba = detector.predict(data, args.target_column)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\anomaly_detector.py", line 219, in predict
+    X_preprocessed = self.preprocess_data(data, target_column)
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\anomaly_detector.py", line 142, in preprocess_data
+    X = self.preprocessor.transform_features(data.drop(columns=[target_column]))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DataPreprocessor' object has no attribute 'transform_features'
+
+2025-03-29 15:22:00,059 - src.anomaly_detector - INFO - Loaded model from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\best_model.joblib
+2025-03-29 15:22:00,064 - src.anomaly_detector - INFO - Loaded preprocessor from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\preprocessor.joblib
+2025-03-29 15:22:00,073 - src.anomaly_detector - INFO - Loaded feature engineer from C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\feature_engineer.joblib
+2025-03-29 15:22:00,074 - __main__ - INFO - Processing file: C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\data\test_data.csv
+2025-03-29 15:22:00,074 - __main__ - INFO - Using model: C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\models\best_model.joblib
+2025-03-29 15:22:00,074 - __main__ - INFO - Detection threshold: 0.5
+2025-03-29 15:22:00,074 - __main__ - INFO - Target column provided:  Label
+2025-03-29 15:22:00,078 - __main__ - INFO - Processing data and making predictions...
+2025-03-29 15:22:00,084 - __main__ - INFO - Loaded data with shape: (1000, 79)
+2025-03-29 15:22:00,095 - src.anomaly_detector - INFO - Engineering features from input with shape (1000, 78)
+2025-03-29 15:22:00,095 - src.feature_engineering - INFO - 
+=== Engineering New Features ===
+2025-03-29 15:22:00,096 - src.feature_engineering - INFO - Created rate feature:  Total Fwd Packets_Rate
+2025-03-29 15:22:00,097 - src.feature_engineering - INFO - Created rate feature:  Total Backward Packets_Rate
+2025-03-29 15:22:00,097 - src.feature_engineering - INFO - Created rate feature: Total Length of Fwd Packets_Rate
+2025-03-29 15:22:00,098 - src.feature_engineering - INFO - Created rate feature:  Total Length of Bwd Packets_Rate
+2025-03-29 15:22:00,098 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Max_Rate
+2025-03-29 15:22:00,098 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Min_Rate
+2025-03-29 15:22:00,099 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Mean_Rate
+2025-03-29 15:22:00,099 - src.feature_engineering - INFO - Created rate feature:  Fwd Packet Length Std_Rate
+2025-03-29 15:22:00,100 - src.feature_engineering - INFO - Created rate feature: Bwd Packet Length Max_Rate
+2025-03-29 15:22:00,100 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Min_Rate
+2025-03-29 15:22:00,100 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Mean_Rate
+2025-03-29 15:22:00,100 - src.feature_engineering - INFO - Created rate feature:  Bwd Packet Length Std_Rate
+2025-03-29 15:22:00,101 - src.feature_engineering - INFO - Created rate feature:  Flow Packets/s_Rate
+2025-03-29 15:22:00,101 - src.feature_engineering - INFO - Created rate feature: Fwd Packets/s_Rate
+2025-03-29 15:22:00,101 - src.feature_engineering - INFO - Created rate feature:  Bwd Packets/s_Rate
+2025-03-29 15:22:00,102 - src.feature_engineering - INFO - Created rate feature:  Min Packet Length_Rate
+2025-03-29 15:22:00,102 - src.feature_engineering - INFO - Created rate feature:  Max Packet Length_Rate
+2025-03-29 15:22:00,102 - src.feature_engineering - INFO - Created rate feature:  Packet Length Mean_Rate
+2025-03-29 15:22:00,102 - src.feature_engineering - INFO - Created rate feature:  Packet Length Std_Rate
+2025-03-29 15:22:00,103 - src.feature_engineering - INFO - Created rate feature:  Packet Length Variance_Rate
+2025-03-29 15:22:00,103 - src.feature_engineering - INFO - Created rate feature:  Average Packet Size_Rate
+2025-03-29 15:22:00,104 - src.feature_engineering - INFO - Created rate feature:  Fwd Avg Packets/Bulk_Rate
+2025-03-29 15:22:00,104 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Packets/Bulk_Rate
+2025-03-29 15:22:00,104 - src.feature_engineering - INFO - Created rate feature: Subflow Fwd Packets_Rate
+2025-03-29 15:22:00,105 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Packets_Rate
+2025-03-29 15:22:00,105 - src.feature_engineering - INFO - Created rate feature: Flow Bytes/s_Rate
+2025-03-29 15:22:00,105 - src.feature_engineering - INFO - Created rate feature: Fwd Avg Bytes/Bulk_Rate
+2025-03-29 15:22:00,106 - src.feature_engineering - INFO - Created rate feature:  Bwd Avg Bytes/Bulk_Rate
+2025-03-29 15:22:00,106 - src.feature_engineering - INFO - Created rate feature:  Subflow Fwd Bytes_Rate
+2025-03-29 15:22:00,107 - src.feature_engineering - INFO - Created rate feature:  Subflow Bwd Bytes_Rate
+2025-03-29 15:22:00,108 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Ratio
+2025-03-29 15:22:00,109 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Ratio
+2025-03-29 15:22:00,110 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Ratio
+2025-03-29 15:22:00,110 - src.feature_engineering - INFO - Created ratio feature:  IAT Total_Ratio
+2025-03-29 15:22:00,111 - src.feature_engineering - INFO - Created ratio feature:   IAT Mean_Ratio
+2025-03-29 15:22:00,112 - src.feature_engineering - INFO - Created ratio feature:   IAT Std_Ratio
+2025-03-29 15:22:00,112 - src.feature_engineering - INFO - Created ratio feature:   IAT Max_Ratio
+2025-03-29 15:22:00,113 - src.feature_engineering - INFO - Created ratio feature:   IAT Min_Ratio
+2025-03-29 15:22:00,113 - src.feature_engineering - INFO - Created ratio feature:   URG Flags_Ratio
+2025-03-29 15:22:00,114 - src.feature_engineering - INFO - Created ratio feature:   Header Length_Ratio
+2025-03-29 15:22:00,114 - src.feature_engineering - INFO - Created ratio feature:  Avg  Segment Size_Ratio
+2025-03-29 15:22:00,115 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Ratio
+2025-03-29 15:22:00,115 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Ratio
+2025-03-29 15:22:00,115 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Min_Rate_Ratio
+2025-03-29 15:22:00,116 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Mean_Rate_Ratio
+2025-03-29 15:22:00,116 - src.feature_engineering - INFO - Created ratio feature:   Packet Length Std_Rate_Ratio
+2025-03-29 15:22:00,117 - src.feature_engineering - INFO - Created ratio feature:   Avg Packets/Bulk_Rate_Ratio
+2025-03-29 15:22:00,117 - src.feature_engineering - INFO - Created ratio feature:  Subflow  Bytes_Rate_Ratio
+2025-03-29 15:22:00,120 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Std_x_ Max Packet Length_Rate
+2025-03-29 15:22:00,120 - src.feature_engineering - INFO - Created interaction feature:  Bwd Packet Length Std_x_ Bwd Avg Packets/Bulk
+2025-03-29 15:22:00,120 - src.feature_engineering - INFO - Created interaction feature:  Fwd IAT Max_x_Fwd PSH Flags
+2025-03-29 15:22:00,121 - src.feature_engineering - INFO - Created interaction feature:  Fwd IAT Max_x_ Fwd IAT Min
+2025-03-29 15:22:00,121 - src.feature_engineering - INFO - Created interaction feature:  Max Packet Length_Rate_x_ Bwd Avg Packets/Bulk
+2025-03-29 15:22:00,121 - src.feature_engineering - INFO - Created interaction feature: Fwd PSH Flags_x_ Fwd IAT Min
+2025-03-29 15:22:00,121 - src.feature_engineering - INFO - Added 54 new engineered features
+2025-03-29 15:22:00,122 - src.anomaly_detector - WARNING - Feature engineering failed: X has 132 features, but SelectKBest is expecting 145 features as input.. Using preprocessed features.
+2025-03-29 15:22:00,122 - src.anomaly_detector - INFO - Making predictions on data with shape (1000, 78)
+2025-03-29 15:22:00,122 - src.anomaly_detector - ERROR - Prediction error: X has 78 features, but RandomForestClassifier is expecting 20 features as input.
+2025-03-29 15:22:00,122 - __main__ - ERROR - Error during processing: X has 78 features, but RandomForestClassifier is expecting 20 features as input.
+2025-03-29 15:22:00,125 - __main__ - ERROR - Traceback (most recent call last):
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\predict.py", line 276, in main
+    y_pred, y_proba = detector.predict(data, args.target_column)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\OneDrive\Documents\InternshipProjects\Anomaly detection\anomaly-detection-in-network-traffic\src\anomaly_detector.py", line 267, in predict
+    y_proba = self.model.predict_proba(X_final)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\ensemble\_forest.py", line 946, in predict_proba
+    X = self._validate_X_predict(X)
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\ensemble\_forest.py", line 638, in _validate_X_predict
+    X = validate_data(
+        self,
+    ...<4 lines>...
+        ensure_all_finite=ensure_all_finite,
+    )
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\validation.py", line 2965, in validate_data
+    _check_n_features(_estimator, X, reset=reset)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\validation.py", line 2829, in _check_n_features
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: X has 78 features, but RandomForestClassifier is expecting 20 features as input.
+
