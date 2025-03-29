@@ -15,10 +15,6 @@
 
 This project implements a sophisticated machine learning pipeline for network traffic anomaly detection using the CIC-IDS 2017 dataset. The system can identify various types of cyber attacks including DDoS, DoS, port scanning, brute force attempts, and web attacks by analyzing network flow features.
 
-<p align="center">
-  <img src="path/to/architecture_diagram.png" alt="System Architecture" width="700">
-</p>
-
 ## 🚀 Key Features
 
 - **📊 Comprehensive Data Pipeline**: Automated preprocessing, feature engineering, and model training
