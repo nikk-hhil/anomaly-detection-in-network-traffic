@@ -15,10 +15,6 @@
 
 This project implements a sophisticated machine learning pipeline for network traffic anomaly detection using the CIC-IDS 2017 dataset. The system can identify various types of cyber attacks including DDoS, DoS, port scanning, brute force attempts, and web attacks by analyzing network flow features.
 
-<p align="center">
-  <img src="path/to/architecture_diagram.png" alt="System Architecture" width="700">
-</p>
-
 ## 🚀 Key Features
 
 - **📊 Comprehensive Data Pipeline**: Automated preprocessing, feature engineering, and model training
@@ -46,8 +42,8 @@ The system is organized into several specialized components:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/network-anomaly-detection.git
-cd network-anomaly-detection
+git clone https://github.com/nikk-hhil/anomaly-detection-in-network-traffic.git
+cd anomaly-detection-in-network-traffic
 
 # Set up environment
 pip install -r requirements.txt
@@ -130,9 +126,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📬 Contact
 
-Your Name - [your.email@example.com](mailto:your.email@example.com)
+Your Name - [khatrinikhil015@gmail.com](mailto:khatrinikhil015@gmail.com)
 
-Project Link: [https://github.com/yourusername/network-anomaly-detection](https://github.com/yourusername/network-anomaly-detection)
+Project Link: [https://github.com/nikk-hhil/anomaly-detection-in-network-traffic]([https://github.com/yourusername/network-anomaly-detection](https://github.com/nikk-hhil/anomaly-detection-in-network-traffic))
 
 ## 🙏 Acknowledgements
 
