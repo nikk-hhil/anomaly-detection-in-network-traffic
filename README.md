@@ -126,7 +126,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📬 Contact
 
-Your Name - [khatrinikhil015@gmail.com](mailto:khatrinikhil015@gmail.com)
+Nikhil Khatri - [khatrinikhil015@gmail.com](mailto:khatrinikhil015@gmail.com)
 
 Project Link: [https://github.com/nikk-hhil/anomaly-detection-in-network-traffic]([https://github.com/yourusername/network-anomaly-detection](https://github.com/nikk-hhil/anomaly-detection-in-network-traffic))
 
