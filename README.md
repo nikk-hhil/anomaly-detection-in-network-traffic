@@ -105,7 +105,7 @@ The model achieves excellent performance metrics on test data:
 </p>
 
 <p align="center">
-  <img src="path/to/confusion_matrix.png" alt="Confusion Matrix" width="600">
+  <img src="results/confusion_matrix.png" alt="Confusion Matrix" width="600">
 </p>
 
 ## 🔮 Future Enhancements
