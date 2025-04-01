@@ -139,5 +139,5 @@ Project Link: [https://github.com/nikk-hhil/anomaly-detection-in-network-traffic
 ---
 
 <p align="center">
-  <i>Made with ❤️ for network security</i>
+  <i>A Cyber Security enthusiast</i>
 </p>
