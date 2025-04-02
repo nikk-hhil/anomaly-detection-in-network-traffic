@@ -17,12 +17,12 @@ This project implements a sophisticated machine learning pipeline for network tr
 
 ##  Key Features
 
--  Comprehensive Data Pipeline**: Automated preprocessing, feature engineering, and model training
--  Advanced Feature Engineering**: Creates 60+ engineered features from raw network traffic data
--  Multiple ML Models**: Trains and evaluates various classification algorithms
+-  Comprehensive Data Pipeline: Automated preprocessing, feature engineering, and model training
+-  Advanced Feature Engineering: Creates 60+ engineered features from raw network traffic data
+-  Multiple ML Models: Trains and evaluates various classification algorithms
 -  Performance Optimization**: Implements timeouts, memory monitoring, and efficient sampling
--  Real-time Prediction**: Detects anomalies in new network traffic data
--  Detailed Evaluation**: Generates comprehensive performance metrics and visualizations
+-  Real-time Prediction: Detects anomalies in new network traffic data
+-  Detailed Evaluation: Generates comprehensive performance metrics and visualizations
 
 ## Technical Architecture
 
