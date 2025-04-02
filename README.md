@@ -1,4 +1,4 @@
-# 🔍 Network Traffic Anomaly Detection
+# Network Traffic Anomaly Detection
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python Version">
