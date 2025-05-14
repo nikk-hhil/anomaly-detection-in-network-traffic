@@ -1,20 +1,34 @@
-# Core libraries
-numpy>=1.20.0
-pandas>=1.3.0
-scikit-learn>=1.0.0
-scipy>=1.7.0
-joblib>=1.0.0
+# Core ML libraries
+numpy>=1.24.0
+pandas>=1.5.0
+scikit-learn>=1.2.0
+scipy>=1.10.0
+joblib>=1.2.0
 
 # Visualization libraries
-matplotlib>=3.4.0
-seaborn>=0.11.0
+matplotlib>=3.6.0
+seaborn>=0.12.0
+plotly>=5.13.0
 
-# Explanation libraries (optional)
-shap>=0.40.0
+# Streamlit for frontend
+streamlit>=1.24.0
 
-# Progress bars (optional)
-tqdm>=4.60.0
+# Explanation libraries
+shap>=0.41.0
 
-# Jupyter for exploration notebooks (optional)
+# Progress bars
+tqdm>=4.64.0
+
+# System monitoring
+psutil>=5.9.0
+
+# Typing support
+typing-extensions>=4.5.0
+
+# Optional libraries for development
 jupyter>=1.0.0
-ipykernel>=6.0.0
+ipykernel>=6.21.0
+
+# Web-related libraries (if deploying on a web server)
+gunicorn>=20.1.0    # For serving the application
+pyyaml>=6.0         # For configuration files
