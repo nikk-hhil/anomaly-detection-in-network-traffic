@@ -66,7 +66,7 @@ def show_data_upload_tab():
         if use_sample:
             try:
                 # Check if sample data exists
-                sample_path = "data/sample_network_traffic.csv"
+                sample_path = "data/test_data.csv"
                 if os.path.exists(sample_path):
                     with st.spinner("Loading sample dataset..."):
                         data = pd.read_csv(sample_path)
@@ -538,10 +538,18 @@ def show_feature_engineering_tab():
     st.header("Feature Engineering")
     
     # Check if preprocessed data is available
-    if st.session_state.preprocessed_data is None:
+    if 'preprocessed_data' not in st.session_state or st.session_state.preprocessed_data is None:
         st.warning("Please complete data preprocessing before feature engineering.")
-        return
     
+        # Add this button to continue anyway
+        if st.button("Continue Anyway (Use Original Data)"):
+            # Use the original data instead
+            st.session_state.preprocessed_data = st.session_state.data
+            st.success("Using original data for feature engineering.")
+            st.experimental_rerun()
+        return
+        
+        
     # Import feature engineer only if needed
     from src.feature_engineering import FeatureEngineer
     
