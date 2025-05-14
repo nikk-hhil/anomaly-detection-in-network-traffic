@@ -61,9 +61,6 @@ def main():
     # Create sidebar for navigation
     st.sidebar.title("Navigation")
     
-    # Add logo or image to sidebar
-    st.sidebar.image("https://img.icons8.com/clouds/100/000000/network-drive.png", width=100)
-    
     # Navigation selection
     selection = st.sidebar.radio("Go to", list(PAGES.keys()))
     
