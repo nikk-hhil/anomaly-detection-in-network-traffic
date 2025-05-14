@@ -1,4 +1,4 @@
-# 🔍 Network Traffic Anomaly Detection
+# Network Traffic Anomaly Detection
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python Version">
@@ -11,20 +11,20 @@
   <i>A machine learning-based system for detecting and classifying network traffic anomalies and cyber attacks</i>
 </p>
 
-## ✨ Overview
+##  Overview
 
 This project implements a sophisticated machine learning pipeline for network traffic anomaly detection using the CIC-IDS 2017 dataset. The system can identify various types of cyber attacks including DDoS, DoS, port scanning, brute force attempts, and web attacks by analyzing network flow features.
 
-## 🚀 Key Features
+##  Key Features
 
-- **📊 Comprehensive Data Pipeline**: Automated preprocessing, feature engineering, and model training
-- **⚙️ Advanced Feature Engineering**: Creates 60+ engineered features from raw network traffic data
-- **🤖 Multiple ML Models**: Trains and evaluates various classification algorithms
-- **⚡ Performance Optimization**: Implements timeouts, memory monitoring, and efficient sampling
-- **🔄 Real-time Prediction**: Detects anomalies in new network traffic data
-- **📈 Detailed Evaluation**: Generates comprehensive performance metrics and visualizations
+-  Comprehensive Data Pipeline: Automated preprocessing, feature engineering, and model training
+-  Advanced Feature Engineering: Creates 60+ engineered features from raw network traffic data
+-  Multiple ML Models: Trains and evaluates various classification algorithms
+-  Performance Optimization**: Implements timeouts, memory monitoring, and efficient sampling
+-  Real-time Prediction: Detects anomalies in new network traffic data
+-  Detailed Evaluation: Generates comprehensive performance metrics and visualizations
 
-## 🏗️ Technical Architecture
+## Technical Architecture
 
 The system is organized into several specialized components:
 
@@ -38,7 +38,7 @@ The system is organized into several specialized components:
 | **Anomaly Detector** | Uses trained models to identify anomalies in new data |
 | **Visualizer** | Creates data and result visualizations |
 
-## 🛠️ Installation
+## Installation
 
 ```bash
 # Clone the repository
@@ -49,7 +49,7 @@ cd anomaly-detection-in-network-traffic
 pip install -r requirements.txt
 ```
 
-## 📋 Usage
+## Usage
 
 ### Training Models
 
@@ -63,7 +63,7 @@ python main.py --data-dir ./data --output-dir ./models --models random_forest,lo
 python predict.py --input ./data/test_data.csv --output ./results --model ./models/best_model.joblib --preprocessor ./models/preprocessor.joblib --feature-engineer ./models/feature_engineer.joblib
 ```
 
-## 📊 Dataset
+## Dataset
 
 This project uses the CIC-IDS 2017 dataset, which contains labeled network traffic including:
 
@@ -75,7 +75,7 @@ This project uses the CIC-IDS 2017 dataset, which contains labeled network traff
 - **Port Scanning**: Network reconnaissance activities
 - **Botnet**: Command and control traffic
 
-## 📈 Results
+## Results
 
 The model achieves excellent performance metrics on test data:
 
@@ -105,10 +105,10 @@ The model achieves excellent performance metrics on test data:
 </p>
 
 <p align="center">
-  <img src="path/to/confusion_matrix.png" alt="Confusion Matrix" width="600">
+  <img src="results/confusion_matrix.png" alt="Confusion Matrix" width="600">
 </p>
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 - [ ] Interactive dashboard for real-time monitoring
 - [ ] Support for streaming data processing
@@ -116,21 +116,21 @@ The model achieves excellent performance metrics on test data:
 - [ ] Benchmark against commercial IDS solutions
 - [ ] Integration with threat intelligence platforms
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 📬 Contact
+## Contact
 
-Your Name - [khatrinikhil015@gmail.com](mailto:khatrinikhil015@gmail.com)
+Nikhil Khatri - [khatrinikhil015@gmail.com](mailto:khatrinikhil015@gmail.com)
 
 Project Link: [https://github.com/nikk-hhil/anomaly-detection-in-network-traffic]([https://github.com/yourusername/network-anomaly-detection](https://github.com/nikk-hhil/anomaly-detection-in-network-traffic))
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
 - [Canadian Institute for Cybersecurity](https://www.unb.ca/cic/) for the CIC-IDS 2017 dataset
 - [Scikit-learn](https://scikit-learn.org/) for machine learning tools
@@ -139,5 +139,5 @@ Project Link: [https://github.com/nikk-hhil/anomaly-detection-in-network-traffic
 ---
 
 <p align="center">
-  <i>Made with ❤️ for network security</i>
+  <i>A Cyber Security enthusiast</i>
 </p>
