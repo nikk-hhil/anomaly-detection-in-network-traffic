@@ -1,0 +1,196 @@
+/* Custom styling for Network Traffic Anomaly Detection app - Compatible with light & dark modes */
+
+/* Light/dark mode variables */
+:root {
+    --text-color: #2c3e50;
+    --background-color: #ffffff;
+    --card-background: #f8f9fa;
+    --border-color: #e9ecef;
+    --accent-color: #3498db;
+    --accent-color-dark: #2980b9;
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --heading-border: #3498db;
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #f1f1f1;
+        --background-color: #1e1e1e;
+        --card-background: #2d2d2d;
+        --border-color: #444444;
+        --accent-color: #4dabf7;
+        --accent-color-dark: #339af0;
+        --heading-border: #4dabf7;
+    }
+}
+
+/* Main App Styling */
+.stApp {
+    color: var(--text-color);
+}
+
+/* Main header styling */
+h1 {
+    color: var(--text-color);
+    font-family: 'Arial', sans-serif;
+    border-bottom: 2px solid var(--heading-border);
+    padding-bottom: 10px;
+}
+
+/* Subheader styling */
+h2 {
+    color: var(--text-color);
+    font-family: 'Arial', sans-serif;
+    margin-top: 25px;
+}
+
+h3 {
+    color: var(--text-color);
+    font-family: 'Arial', sans-serif;
+    margin-top: 20px;
+}
+
+/* Card styling for metrics */
+div[data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+    color: var(--accent-color);
+}
+
+/* Alert box styling */
+div.stAlert {
+    border-radius: 8px;
+    border-width: 1px;
+}
+
+/* Make sure alert text is visible */
+div.stAlert > div:first-child {
+    color: var(--text-color);
+}
+
+/* Button styling */
+button[kind="primary"] {
+    background-color: var(--accent-color);
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Sidebar styling */
+section[data-testid="stSidebar"] {
+    background-color: var(--card-background);
+}
+
+/* Data tables styling */
+div[data-testid="stTable"] {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/* Code block styling */
+pre {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* Link styling */
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: var(--accent-color-dark);
+}
+
+/* Custom class for feature cards */
+.feature-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Custom class for metric highlights */
+.metric-highlight {
+    font-weight: bold;
+    color: var(--success-color);
+}
+
+/* Warning highlighting */
+.warning-highlight {
+    font-weight: bold;
+    color: var(--danger-color);
+}
+
+/* Status indicator dot */
+.status-dot {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.status-dot-green {
+    background-color: var(--success-color);
+}
+
+.status-dot-yellow {
+    background-color: var(--warning-color);
+}
+
+.status-dot-red {
+    background-color: var(--danger-color);
+}
+
+/* Ensure DataFrames are readable in dark mode */
+div[data-testid="stDataFrame"] {
+    color: var(--text-color);
+    background-color: var(--card-background);
+}
+
+/* Fix for plotly charts in dark mode */
+.js-plotly-plot {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    padding: 8px;
+}
+
+/* Better visibility for select boxes in dark mode */
+div[data-baseweb="select"] > div {
+    background-color: var(--card-background);
+    border-color: var(--border-color);
+}
+
+/* Ensure multiselect items are visible */
+div[data-baseweb="tag"] {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+/* Make sure file uploader is visible */
+div[data-testid="stFileUploader"] {
+    background-color: var(--card-background);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px dashed var(--border-color);
+}
+
+/* Ensure tabs are visible in dark mode */
+div[data-baseweb="tab-list"] {
+    background-color: var(--card-background);
+}
+
+div[data-baseweb="tab"] {
+    color: var(--text-color);
+}
+
+div[data-baseweb="tab"][aria-selected="true"] {
+    color: var(--accent-color);
+}
