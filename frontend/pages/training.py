@@ -197,18 +197,62 @@ def show_model_training_tab():
             )
     
     # Train models button
+# Train models button
     if st.button("Train Selected Models", use_container_width=True):
         try:
             with st.spinner("Training models... This may take some time."):
                 # Get data
                 features_data = st.session_state.features
+            
+                    # Check for object/string columns in the features
+                if features_data is not None:
+                    # Make a copy to avoid modifying the original
+                    features_data = features_data.copy()
                 
+                    # Check for and handle object columns (except the target column)
+                    object_cols = features_data.select_dtypes(include=['object']).columns.tolist()
+                    if st.session_state.target_column in object_cols:
+                        object_cols.remove(st.session_state.target_column)
+                
+                    if object_cols:
+                        st.warning(f"Found object/string columns that need encoding: {', '.join(object_cols)}")
+                    
+                        # Use one-hot encoding for categorical features
+                        for col in object_cols:
+                            # Create dummy variables
+                            dummies = pd.get_dummies(features_data[col], prefix=col, drop_first=False)
+                            # Add dummy variables to the dataset
+                            features_data = pd.concat([features_data, dummies], axis=1)
+                            # Drop the original column
+                            features_data = features_data.drop(columns=[col])
+                    
+                        st.success("Encoded object columns using one-hot encoding.")
+            
                 # Get features and target
                 X = features_data.drop(columns=[st.session_state.target_column]).values
-                y = features_data[st.session_state.target_column].values
-                feature_names = features_data.drop(columns=[st.session_state.target_column]).columns.tolist()
+
+                # Handle target column encoding
+                target_col = features_data[st.session_state.target_column]
+                if target_col.dtype == 'object':
+                    # Use LabelEncoder for the target
+                    from sklearn.preprocessing import LabelEncoder
+                    label_encoder = LabelEncoder()
+                    y = label_encoder.fit_transform(target_col)
                 
-                # Split data using your ModelTrainer's method
+                    # Store label encoder for future use
+                    st.session_state.label_encoder = label_encoder
+                    st.session_state.target_classes = label_encoder.classes_
+                
+                    st.info(f"Encoded target column '{st.session_state.target_column}' using LabelEncoder.")
+                else:
+                    y = target_col.values
+                    # Ensure y is integer type for classification
+                    if np.issubdtype(y.dtype, np.number):
+                        y = y.astype(int)
+            
+                feature_names = features_data.drop(columns=[st.session_state.target_column]).columns.tolist()
+            
+                # Split data
                 X_train, X_test, y_train, y_test = st.session_state.model_trainer.split_data(
                     X, y, test_size=test_size, random_state=int(random_state), stratify=stratify
                 )

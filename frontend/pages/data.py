@@ -66,7 +66,7 @@ def show_data_upload_tab():
         if use_sample:
             try:
                 # Check if sample data exists
-                sample_path = "data/test_data.csv"
+                sample_path = "data\Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv"
                 if os.path.exists(sample_path):
                     with st.spinner("Loading sample dataset..."):
                         data = pd.read_csv(sample_path)
@@ -537,19 +537,23 @@ def show_feature_engineering_tab():
     """Show feature engineering options and apply feature engineering."""
     st.header("Feature Engineering")
     
-    # Check if preprocessed data is available
-    if 'preprocessed_data' not in st.session_state or st.session_state.preprocessed_data is None:
-        st.warning("Please complete data preprocessing before feature engineering.")
-    
-        # Add this button to continue anyway
-        if st.button("Continue Anyway (Use Original Data)"):
-            # Use the original data instead
-            st.session_state.preprocessed_data = st.session_state.data
-            st.success("Using original data for feature engineering.")
-            st.experimental_rerun()
+    # Check if we have data from any source
+    if 'preprocessed_data' in st.session_state and st.session_state.preprocessed_data is not None:
+        # Use preprocessed data (ideal case)
+        data_to_use = st.session_state.preprocessed_data
+        st.info("Using preprocessed data for feature engineering.")
+    elif 'data' in st.session_state and st.session_state.data is not None:
+        # Fall back to original data
+        data_to_use = st.session_state.data
+        st.warning("Using original data since preprocessed data is not available. This is not optimal but will allow you to continue.")
+        
+        # Save it as preprocessed data for future reference
+        st.session_state.preprocessed_data = st.session_state.data
+    else:
+        # No data at all
+        st.error("No data available. Please upload data first.")
         return
-        
-        
+    
     # Import feature engineer only if needed
     from src.feature_engineering import FeatureEngineer
     
@@ -588,8 +592,58 @@ def show_feature_engineering_tab():
     if st.button("Apply Feature Engineering"):
         try:
             with st.spinner("Engineering features..."):
-                # Get data for feature engineering
-                data = st.session_state.preprocessed_data
+                # We're using data_to_use which is guaranteed to be not None
+                data = data_to_use
+                
+                # Check for and handle NaN values and infinities
+                has_issues = data.isna().any().any() or np.isinf(data.select_dtypes(include=['float64', 'int64'])).any().any()
+                
+                if has_issues:
+                    st.warning("Data contains missing values or infinity values. Fixing automatically...")
+                    
+                    # Make a copy to avoid modifying the original
+                    data = data.copy()
+                    
+                    # Handle numeric columns
+                    numeric_cols = data.select_dtypes(include=['float64', 'int64']).columns
+                    for col in numeric_cols:
+                        # Get median of non-NA, non-infinite values
+                        valid_values = data[col][~data[col].isna() & ~np.isinf(data[col])]
+                        median_value = valid_values.median() if len(valid_values) > 0 else 0
+                        
+                        # Replace NaN and infinity with median
+                        data[col] = data[col].replace([np.inf, -np.inf], np.nan)
+                        data[col] = data[col].fillna(median_value)
+                    
+                    # Handle categorical columns
+                    cat_cols = data.select_dtypes(include=['object']).columns
+                    for col in cat_cols:
+                        # Replace NaN with mode
+                        most_common = data[col].mode()[0] if not data[col].mode().empty else "Unknown"
+                        data[col] = data[col].fillna(most_common)
+                    
+                    st.success("Missing and infinity values have been fixed automatically.")
+                
+                # Check if target column exists
+                if 'target_column' not in st.session_state or st.session_state.target_column is None:
+                    # Try to identify target column
+                    potential_target = identify_target_column(data)
+                    if potential_target:
+                        st.session_state.target_column = potential_target
+                        st.info(f"Automatically identified '{potential_target}' as the target column.")
+                    else:
+                        st.error("No target column identified. Please go to Data Overview and select a target column.")
+                        return
+                
+                # Make sure target column exists in the data
+                if st.session_state.target_column not in data.columns:
+                    st.error(f"Target column '{st.session_state.target_column}' not found in data.")
+                    return
+                
+                # One final check for NaN or infinity values
+                if data.isna().any().any() or np.isinf(data.select_dtypes(include=['float64', 'int64'])).any().any():
+                    st.error("Data still contains missing or infinity values after cleaning. Please check your data.")
+                    return
                 
                 # Separate features and target
                 X = data.drop(columns=[st.session_state.target_column]).values
@@ -664,6 +718,9 @@ def show_feature_engineering_tab():
                                 'Importance': scores
                             })
                         
+                        # Convert to plot-friendly format
+                        from frontend.utils.visualization import prepare_dataframe_for_plotting
+                        feature_importance = prepare_dataframe_for_plotting(feature_importance)
                         feature_importance = feature_importance.sort_values('Importance', ascending=False)
                         
                         st.subheader("Feature Importance")
@@ -684,12 +741,14 @@ def show_feature_engineering_tab():
         
         except Exception as e:
             st.error(f"Error during feature engineering: {str(e)}")
+            st.exception(e)  # This shows the full traceback for debugging
     
     # Display existing features if available
     if 'features' in st.session_state and st.session_state.features is not None:
         st.subheader("Current Engineered Features")
         st.info(f"Engineered data shape: {st.session_state.features.shape}")
         st.dataframe(st.session_state.features.head())
+        
 
 if __name__ == "__main__":
     # For testing the page in isolation
