@@ -245,12 +245,17 @@ def show_model_training_tab():
                 
                     st.info(f"Encoded target column '{st.session_state.target_column}' using LabelEncoder.")
                 else:
-                    y = target_col.values
+                    y = target_col.astype(int).values
                     # Ensure y is integer type for classification
                     if np.issubdtype(y.dtype, np.number):
                         y = y.astype(int)
             
                 feature_names = features_data.drop(columns=[st.session_state.target_column]).columns.tolist()
+                
+                X = X.astype(float)
+
+                st.write(f"X shape: {X.shape}, type: {X.dtype}")
+                st.write(f"y shape: {y.shape}, type: {y.dtype}")
             
                 # Split data
                 X_train, X_test, y_train, y_test = st.session_state.model_trainer.split_data(

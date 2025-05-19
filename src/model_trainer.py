@@ -192,10 +192,10 @@ class ModelTrainer:
                     common_class_indices, 
                     size=n_samples_common, 
                     replace=False
-                )
+                ).astype(int)
             
             # Combine rare class samples with sampled common class samples
-                all_sampled_indices = np.concatenate([rare_class_indices, sampled_common_indices])
+                all_sampled_indices = np.concatenate([rare_class_indices, sampled_common_indices]).astype(int)
             
             # Shuffle the indices
                 np.random.shuffle(all_sampled_indices)
