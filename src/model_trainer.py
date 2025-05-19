@@ -172,6 +172,7 @@ class ModelTrainer:
         # Separate indices for rare and common classes
             for cls in classes:
                 cls_indices = np.where(y == cls)[0]
+                cls_indices = cls_indices.astype(int)
                 cls_count = len(cls_indices)
             
                 if cls_count < min_samples_per_class / ratio:
@@ -196,6 +197,7 @@ class ModelTrainer:
             
             # Combine rare class samples with sampled common class samples
                 all_sampled_indices = np.concatenate([rare_class_indices, sampled_common_indices]).astype(int)
+                all_sampled_indices = all_sampled_indices.astype(int)
             
             # Shuffle the indices
                 np.random.shuffle(all_sampled_indices)
