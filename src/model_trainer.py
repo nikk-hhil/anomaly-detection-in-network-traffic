@@ -181,8 +181,8 @@ class ModelTrainer:
                     common_class_indices.extend(cls_indices)
         
         # Convert to numpy arrays
-            rare_class_indices = np.array(rare_class_indices)
-            common_class_indices = np.array(common_class_indices)
+            rare_class_indices = np.array(rare_class_indices, dtype=int)
+            common_class_indices = np.array(common_class_indices, dtype=int)
         
         # Sample from common classes
             if len(common_class_indices) > 0:
